@@ -3515,8 +3515,8 @@ showDiv('s01');
 var s = document.createElement('style');
 s.id = 'fix3';
 s.textContent = '\
-:root{--bg:#1a1b1e;--bg2:#25262b;--bg3:#2c2e33;--bd:#373a40;--bd2:#4a4d55;\
---tx:#fff;--tx2:#c1c2c5;--tx3:#909296;--acc:#e8703a;--mat:#4dabf7;--lab:#51cf66;}\
+:root{--bg:#0d0d0d;--bg2:#1a1a1a;--bg3:#111111;--bd:#2a2a2a;--bd2:#333333;\
+--tx:#f0f0f0;--tx2:#a0a0a0;--tx3:#a0a0a0;--acc:#e8703a;--mat:#4dabf7;--lab:#51cf66;}\
 body{background:var(--bg)!important;color:var(--tx2)!important}\
 .pricing-row.fixed{background:var(--bg2)!important;border:1px solid var(--bd)!important;\
 border-radius:10px!important;margin-bottom:10px!important;overflow:hidden!important;padding:0!important}\
@@ -4208,9 +4208,9 @@ var Q5 = {
   'Hoshizaki IM-400MAJ Ice Machine \u2014 GC Plumbing & Electrical Connections':
     {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.hoshizakiamerica.com/ice-machines/'},
   'Hoshizaki B-700PF Ice Storage Bin \u2014 GC Set in Place & Connect':
-    {mq:1,mu:'EA',lq:1,lu:'EA'},
+    {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.hoshizakiamerica.com'},
   'Hoshizaki Certified Installer \u2014 Remote Condenser, Refrigerant Lines & Startup':
-    {mq:1,mu:'LS',lq:1,lu:'LS'},
+    {mq:1,mu:'LS',lq:1,lu:'LS',link:'https://www.hoshizakiamerica.com'},
   'TurboChef SOTA Convection Oven \u2014 GC Electrical Connection, NEMA 6-30R':
     {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.turbochef.com/products/sota'},
   'Master-Bilt DC-40 Dipping Freezer \u2014 GC Electrical Connection':
@@ -4537,9 +4537,9 @@ var Q5 = {
   'Hoshizaki IM-400MAJ Ice Machine \u2014 GC Plumbing & Electrical Connections':
     {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.hoshizakiamerica.com/ice-machines/'},
   'Hoshizaki B-700PF Ice Storage Bin \u2014 GC Set in Place & Connect':
-    {mq:1,mu:'EA',lq:1,lu:'EA'},
+    {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.hoshizakiamerica.com'},
   'Hoshizaki Certified Installer \u2014 Remote Condenser, Refrigerant Lines & Startup':
-    {mq:1,mu:'LS',lq:1,lu:'LS'},
+    {mq:1,mu:'LS',lq:1,lu:'LS',link:'https://www.hoshizakiamerica.com'},
   'TurboChef SOTA Convection Oven \u2014 GC Electrical Connection, NEMA 6-30R':
     {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.turbochef.com/products/sota'},
   'Master-Bilt DC-40 Dipping Freezer \u2014 GC Electrical Connection':
@@ -4866,9 +4866,9 @@ var Q5 = {
   'Hoshizaki IM-400MAJ Ice Machine \u2014 GC Plumbing & Electrical Connections':
     {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.hoshizakiamerica.com/ice-machines/'},
   'Hoshizaki B-700PF Ice Storage Bin \u2014 GC Set in Place & Connect':
-    {mq:1,mu:'EA',lq:1,lu:'EA'},
+    {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.hoshizakiamerica.com'},
   'Hoshizaki Certified Installer \u2014 Remote Condenser, Refrigerant Lines & Startup':
-    {mq:1,mu:'LS',lq:1,lu:'LS'},
+    {mq:1,mu:'LS',lq:1,lu:'LS',link:'https://www.hoshizakiamerica.com'},
   'TurboChef SOTA Convection Oven \u2014 GC Electrical Connection, NEMA 6-30R':
     {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.turbochef.com/products/sota'},
   'Master-Bilt DC-40 Dipping Freezer \u2014 GC Electrical Connection':
@@ -4961,63 +4961,75 @@ if (document.readyState === 'loading') {
 </script>
 <script>
 (function(){
-/* ── Pricing Table Overlay v2 — Dual MAT/LAB Rows ──────────────
+/* ── Pricing Table Overlay v3 — Dual MAT/LAB + Notes + Links ───
    Reads existing .pricing-row divs, hides them, builds a <table>
-   per division with separate MAT + LAB input rows per line item.
-   Does NOT touch scope, nav, or accordion JS.                    */
+   per division. Does NOT touch scope, nav, or accordion JS.      */
 
-/* 1. CSS */
+/* ── CSS ─────────────────────────────────────────────────────── */
 var css=document.createElement('style');
 css.textContent='\
 .ptbl{width:100%;border-collapse:collapse;border-radius:10px;\
-overflow:hidden;border:1px solid var(--b5,#3D280F);font-size:12px;margin-top:6px}\
-.ptbl thead th{background:var(--b9,#0F0A05);color:var(--tx3,#8B7055);font-size:10px;\
+overflow:hidden;border:1px solid #2a2a2a;font-size:12px;margin-top:6px}\
+.ptbl thead th{background:#111111;color:#a0a0a0;font-size:10px;\
 font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:8px 10px;\
-border-bottom:2px solid var(--b4,#5C3A18);text-align:right;white-space:nowrap}\
+border-bottom:2px solid #2a2a2a;text-align:right;white-space:nowrap}\
 .ptbl thead th:first-child{text-align:left;width:34%}\
 .ptbl thead th.th-type{width:40px;text-align:center}\
-.ptbl tbody td{padding:5px 8px;border-bottom:1px solid rgba(61,40,15,.35);vertical-align:middle}\
+.ptbl tbody td{padding:5px 8px;border-bottom:1px solid #2a2a2a;vertical-align:middle}\
 .ptbl tbody td:not(:first-child):not(.td-type){text-align:right}\
-.ptbl tbody tr{background:var(--b6,#2D1C0A);transition:background .12s}\
-.ptbl tbody tr:hover{background:var(--b5,#3D280F)}\
-.ptbl tbody tr.r-mat{border-left:3px solid #4dabf7}\
-.ptbl tbody tr.r-lab{border-left:3px solid #51cf66}\
-.ptbl .td-n{font-size:12px;color:var(--tx1,#EDE0CC);font-weight:600;line-height:1.3;\
-background:var(--b7,#231508);border-right:1px solid rgba(61,40,15,.35)}\
-.ptbl .td-n .sl{font-size:10px;color:#4dabf7;text-decoration:none;margin-left:6px;opacity:.7}\
+.ptbl tbody tr{transition:background .12s}\
+.ptbl tbody tr:hover{filter:brightness(1.15)}\
+.ptbl tbody tr.r-mat{background:#1e2433;border-left:4px solid #4dabf7}\
+.ptbl tbody tr.r-mat-alt{background:#1a2030;border-left:4px solid #4dabf7}\
+.ptbl tbody tr.r-lab{background:#1a2420;border-left:4px solid #51cf66}\
+.ptbl tbody tr.r-lab-alt{background:#162019;border-left:4px solid #51cf66}\
+.ptbl tbody tr.r-mat-pair td{border-bottom:none}\
+.ptbl tbody tr.r-lab-pair td{border-top:1px dashed rgba(77,171,247,.15);\
+border-bottom:2px solid #2a2a2a}\
+.ptbl tbody tr.r-lab-standalone td{border-top:2px solid #2a2a2a}\
+.ptbl .td-n{font-size:13px;color:#f0f0f0;font-weight:700;line-height:1.4;\
+background:#1a1a1a;border-right:1px solid #2a2a2a;padding:8px 10px}\
+.ptbl .td-n .sl{font-size:10px;color:#4dabf7;text-decoration:none;\
+margin-left:6px;opacity:.75;white-space:nowrap}\
 .ptbl .td-n .sl:hover{opacity:1;text-decoration:underline}\
-.td-type{text-align:center;font-size:9px;font-weight:800;letter-spacing:.08em;width:40px}\
+.ptbl .td-n .note{font-size:10px;font-style:italic;color:#a0a0a0;\
+margin-top:3px;line-height:1.35;font-weight:400}\
+.td-type{text-align:center;font-size:9px;font-weight:800;\
+letter-spacing:.08em;width:40px}\
 .td-type.mat{color:#4dabf7}.td-type.lab{color:#51cf66}\
 .ptbl .td-s{font-family:var(--mono,monospace);font-weight:700;font-size:12px;\
 min-width:72px;font-variant-numeric:tabular-nums}\
-.ptbl tr.r-mat .td-s{color:#4dabf7}\
-.ptbl tr.r-lab .td-s{color:#51cf66}\
+.ptbl tr.r-mat .td-s,.ptbl tr.r-mat-alt .td-s{color:#4dabf7}\
+.ptbl tr.r-lab .td-s,.ptbl tr.r-lab-alt .td-s{color:#51cf66}\
 .td-lt{font-family:var(--mono,monospace);font-weight:800;font-size:13px;\
-color:var(--acc3,#D4AA6A);text-align:right;font-variant-numeric:tabular-nums;\
-background:var(--b7,#231508);border-left:1px solid rgba(61,40,15,.35);min-width:90px;\
+color:#e8703a;text-align:right;font-variant-numeric:tabular-nums;\
+background:#1a1a1a;border-left:1px solid #2a2a2a;min-width:90px;\
 vertical-align:middle}\
-.ptbl tfoot td{background:var(--b9,#0F0A05);padding:9px 10px;font-weight:800;\
-border-top:2px solid var(--b4,#5C3A18);color:var(--acc3,#D4AA6A);\
+.ptbl tfoot td{background:#111111;padding:9px 10px;font-weight:800;\
+border-top:2px solid #2a2a2a;color:#e8703a;\
 font-family:var(--mono,monospace);font-variant-numeric:tabular-nums}\
-.ptbl tfoot td:first-child{color:var(--tx3,#8B7055);font-family:var(--font,sans-serif);\
+.ptbl tfoot td:first-child{color:#a0a0a0;font-family:var(--font,sans-serif);\
 text-transform:uppercase;font-size:10px;letter-spacing:.08em}\
-.pti{width:72px;padding:5px 8px;border-radius:4px;border:1px solid var(--b5,#3D280F);\
-background:var(--b9,#0F0A05);color:var(--tx1,#EDE0CC);font-size:12px;\
-font-family:var(--mono,monospace);text-align:right;-moz-appearance:textfield}\
+.pti{width:72px;padding:5px 8px;border-radius:4px;border:1px solid #333333;\
+background:#0d0d0d;color:#f0f0f0;font-size:12px;\
+font-family:var(--mono,monospace);text-align:right;-moz-appearance:textfield;\
+transition:border-color .15s,box-shadow .15s}\
 .pti::-webkit-outer-spin-button,.pti::-webkit-inner-spin-button{-webkit-appearance:none}\
-.pti:focus{outline:none;border-color:var(--acc,#A0522D);background:var(--b8,#1A1008)}\
+.pti:focus{outline:none;border-color:#4dabf7;background:#0d0d0d;\
+box-shadow:0 0 0 2px rgba(77,171,247,0.3)}\
 .pti.q{width:64px}.pti.up{width:82px}\
-.pts{padding:4px 5px;border-radius:4px;border:1px solid var(--b5,#3D280F);\
-background:var(--b9,#0F0A05);color:var(--tx2,#C4A878);font-size:11px;cursor:pointer}\
-.pts:focus{outline:none;border-color:var(--acc,#A0522D)}\
-.ptbl tbody tr.r-lab-pair{border-top:none}\
-.ptbl tbody tr.r-lab-pair td{border-top:1px dashed rgba(61,40,15,.25)}\
-.ptbl tbody tr.r-mat-pair td{border-bottom:none}\
+.pts{padding:4px 5px;border-radius:4px;border:1px solid #333333;\
+background:#0d0d0d;color:#a0a0a0;font-size:11px;cursor:pointer;\
+transition:border-color .15s}\
+.pts:focus{outline:none;border-color:#4dabf7}\
+.td-n-standalone{font-size:13px;color:#51cf66;font-weight:700;\
+font-style:italic;line-height:1.4;background:#1a1a1a;\
+border-right:1px solid #2a2a2a;padding:8px 10px}\
 @media(max-width:700px){.ptbl{font-size:11px}.ptbl thead th,.ptbl td{padding:4px 5px}\
 .pti{width:54px;padding:3px 5px}.pti.up{width:64px}.td-n{font-size:11px}}\
 @media print{.ptbl{border:1px solid #ccc}\
-.ptbl thead th{background:#2D1C0A;color:#EDE0CC;-webkit-print-color-adjust:exact}\
-.ptbl tfoot td{background:#2D1C0A;color:#D4AA6A;-webkit-print-color-adjust:exact}}\
+.ptbl thead th{background:#111;color:#eee;-webkit-print-color-adjust:exact}\
+.ptbl tfoot td{background:#111;color:#e8703a;-webkit-print-color-adjust:exact}}\
 ';
 document.head.appendChild(css);
 
@@ -5030,36 +5042,121 @@ function mkOpts(sel){
   }).join('');
 }
 
+/* ── LINKS fallback — brand substring → URL ──────────────────── */
+var BRANDLINKS={
+  'Hoshizaki':'https://www.hoshizakiamerica.com',
+  'TurboChef':'https://www.turbochef.com',
+  'Master-Bilt':'https://www.master-bilt.com',
+  'Turbo Air':'https://www.turboairinc.com',
+  'Ready Access':'https://www.readyaccess.com',
+  'Sherwin':'https://www.sherwin-williams.com',
+  'Schluter':'https://www.schluter.com',
+  'AmeriPolish':'https://www.ameripolish.com',
+  'Grundfos':'https://www.grundfos.com',
+  'Western Purifier':'https://www.westernpurifier.com',
+  'HME':'https://www.hme.com',
+  'Detex':'https://www.detex.com',
+  'NORA':'https://www.noralighting.com',
+  'Tech Lighting':'https://www.techlighting.com',
+  'Trane':'https://www.trane.com',
+  'American Standard':'https://www.americanstandard-us.com',
+  'Colormark':'https://www.colormark.com',
+  'Everbrite':'https://www.everbrite.com',
+  'USG':'https://www.usg.com',
+  'ClimaPlus':'https://www.usg.com',
+  'Sheetrock':'https://www.usg.com',
+  'Natura':'https://www.usg.com',
+  'Frost':'https://www.usg.com',
+  'McMaster':'https://www.mcmaster.com',
+  'Monoprice':'https://www.monoprice.com',
+  'Nucor':'https://www.nucor.com',
+  'Timberline':'https://www.timberlinewood.com',
+  'Timeline':'https://www.timberlinewood.com',
+  'Creative Materials':'https://www.creativematerialscorp.com',
+  'Watts':'https://www.watts.com',
+  'Tork':'https://www.tork.com'
+};
+function findLink(label){
+  var keys=Object.keys(BRANDLINKS);
+  for(var i=0;i<keys.length;i++){
+    if(label.indexOf(keys[i])!==-1) return BRANDLINKS[keys[i]];
+  }
+  return '';
+}
+
+/* ── NOTES — measurement references ──────────────────────────── */
+var NOTES={
+  '6" Steel Bollards \u2014 concrete filled, painted':
+    'Min 6 EA per detail 2/A-1a \u00b7 8"x7\'-0" bar welded',
+  'Concrete Paving Sealant & Expansion Joint Material':
+    '1/2" exp joint material \u00b7 3/4"x2\' anchor pipe \u00b7 detail 2/A-1a',
+  'Underground Conduit \u2014 1-1/4" for Drive-Thru Cable/Power':
+    '100 LF est \u00b7 Sheet E-3 & A-9 \u00b7 2" below grade',
+  'Detector Loop \u2014 72" PVC w/ Loop, 3/4" SCH 40 Conduit to Panel':
+    '72" PVC provided by HME \u00b7 center w/ menu board \u00b7 detail 6/A-9',
+  'Concrete \u2014 4" Slab on Grade, 4,000 PSI':
+    '1,325 SF \u00d7 4" = 16.3 CY \u00b7 4,000 PSI \u00b7 S1.1',
+  'Rebar \u2014 #3 @ 14" OC Both Ways':
+    'Both ways centered in slab \u00b7 2,300 LF est \u00b7 S1.1',
+  'Epoxy Grout & Dowels \u2014 #3 x 1\'-6" @ 18" OC':
+    '#3 \u00d7 1\'-6" @ 18" OC \u00b7 drill 6" into existing \u00b7 detail 3/S1.1',
+  'RTU Roof Opening Framing \u2014 L3x3x3/16 Steel Angles':
+    'L3x3x3/16 continuous under curb \u00b7 16 LF \u00b7 detail 3/S1.2',
+  'Slab Demo & Trench Excavation for Under-Floor Plumbing':
+    'Under-floor plumbing only \u00b7 150 LF est \u00b7 Sheet P-2A',
+  'Metal Stud Framing \u2014 3-5/8" 16" OC':
+    '3-5/8" 16" OC max \u00b7 cross-brace to structure @ 48" OC \u00b7 Sheet A-2',
+  '5/8" Type X Drywall \u2014 Standard Partitions':
+    '3,250 SF walls + ceiling \u00b7 Level 4 finish FOH \u00b7 Sheet A-2',
+  '5/8" Glass Mat Tile Backer \u2014 Wet & Tile Areas':
+    '350 SF restrooms + wet walls \u00b7 behind all wall tile \u00b7 Sheet A-2',
+  '0.09" Non-Rated Smooth FRP Panels':
+    '0.09" non-rated smooth \u00b7 400 SF service area \u00b7 above drop ceiling BOH'
+};
+
+/* ── Build tables ────────────────────────────────────────────── */
 function buildTables(){
   document.querySelectorAll('.card-pricing').forEach(function(card){
     if(card.querySelector('.ptbl')) return;
-    var rows=Array.from(card.querySelectorAll('.pricing-row.fixed'));
-    if(!rows.length) return;
+    var allRows=Array.from(card.querySelectorAll('.pricing-row.fixed'));
+    if(!allRows.length) return;
 
-    /* hide originals */
-    rows.forEach(function(r){r.style.cssText='display:none!important'});
+    /* separate MAT items from the aggregate labor row */
+    var matRows=[];
+    var labRow=null;
+    allRows.forEach(function(r){
+      r.style.cssText='display:none!important';
+      if(r.classList.contains('labor-row')) labRow=r;
+      else matRows.push(r);
+    });
+
+    /* hide labels, buttons, bid-cards */
     var lbl=card.querySelector('.pricing-label');
     if(lbl) lbl.style.display='none';
     var addBtn=card.querySelector('.add-mat-btn');
     if(addBtn) addBtn.style.display='none';
-    card.querySelectorAll('.bid-card').forEach(function(bc){bc.style.cssText='display:none!important'});
+    card.querySelectorAll('.bid-card').forEach(function(bc){
+      bc.style.cssText='display:none!important';
+    });
 
     var tbl=document.createElement('table');
     tbl.className='ptbl';
 
+    /* thead */
     var thead=document.createElement('thead');
-    thead.innerHTML='<tr><th>Description</th><th class="th-type"></th><th>Qty</th><th>Unit</th><th>Unit Price</th><th>Subtotal</th><th>Line Total</th></tr>';
+    thead.innerHTML='<tr><th>Description</th><th class="th-type"></th>'+
+      '<th>Qty</th><th>Unit</th><th>Unit Price</th><th>Subtotal</th><th>Line Total</th></tr>';
     tbl.appendChild(thead);
 
     var tbody=document.createElement('tbody');
+    var pairIdx=0;
 
-    /* Group: each non-labor row gets a paired MAT+LAB block.
-       Standalone labor rows (the arrow ones) render as single LAB rows. */
-    rows.forEach(function(row){
+    /* ── MAT items as paired MAT+LAB rows ── */
+    matRows.forEach(function(row){
       var label=row.getAttribute('data-row-label')||'';
-      var isLab=row.classList.contains('labor-row');
+      var isAlt=(pairIdx%2===1);
 
-      /* read existing values from hidden row */
+      /* read values from hidden row */
       var qtyInput=row.querySelector('[data-role=qty]');
       var unitSel=row.querySelector('select');
       var priceInput=row.querySelector('[data-role=unit]');
@@ -5068,59 +5165,78 @@ function buildTables(){
       var priceVal=priceInput?priceInput.value:'';
       var ph=qtyInput?(qtyInput.placeholder||'0'):'0';
 
-      /* source link */
+      /* source link: check hidden row first, then fallback */
       var srcEl=row.querySelector('a.src-link,a.mat-link,a[href]');
       var srcHref=srcEl?srcEl.href:'';
-      var srcHtml=srcHref?'<a class="sl" href="'+srcHref+'" target="_blank" rel="noopener">&#8599; Src</a>':'';
+      if(!srcHref) srcHref=findLink(label);
+      var srcHtml=srcHref?'<a class="sl" href="'+srcHref+'" target="_blank" rel="noopener">&#8599; Source</a>':'';
 
-      if(isLab){
-        /* standalone labor row — single row, full width */
-        var tr=document.createElement('tr');
-        tr.className='r-lab';
-        tr.setAttribute('data-row-label',label);
-        tr.setAttribute('data-lab','1');
-        tr.innerHTML=
-          '<td class="td-n" style="font-style:italic;color:#51cf66">&#8618; '+label+'</td>'+
-          '<td class="td-type lab">LAB</td>'+
-          '<td><input class="pti q" type="number" min="0" step="any" placeholder="'+ph+'"'+(qtyVal?' value="'+qtyVal+'"':'')+' data-role="qty"></td>'+
-          '<td><select class="pts">'+mkOpts(unitVal)+'</select></td>'+
-          '<td><input class="pti up" type="number" min="0" step="0.01" placeholder="0.00"'+(priceVal?' value="'+priceVal+'"':'')+' data-role="unit"></td>'+
-          '<td class="td-s" data-role="total">$0.00</td>'+
-          '<td class="td-lt" data-role="linetotal">$0.00</td>';
-        tbody.appendChild(tr);
-      } else {
-        /* paired MAT + LAB rows */
-        /* MAT row */
-        var trM=document.createElement('tr');
-        trM.className='r-mat r-mat-pair';
-        trM.setAttribute('data-row-label',label);
-        trM.setAttribute('data-pair','mat');
-        trM.innerHTML=
-          '<td class="td-n" rowspan="2">'+label+srcHtml+'</td>'+
-          '<td class="td-type mat">MAT</td>'+
-          '<td><input class="pti q" type="number" min="0" step="any" placeholder="'+ph+'"'+(qtyVal?' value="'+qtyVal+'"':'')+' data-role="qty"></td>'+
-          '<td><select class="pts">'+mkOpts(unitVal)+'</select></td>'+
-          '<td><input class="pti up" type="number" min="0" step="0.01" placeholder="0.00" data-role="unit"></td>'+
-          '<td class="td-s" data-role="total">$0.00</td>'+
-          '<td class="td-lt" rowspan="2" data-role="linetotal">$0.00</td>';
-        tbody.appendChild(trM);
+      /* note */
+      var note=NOTES[label];
+      var noteHtml=note?'<div class="note">'+note+'</div>':'';
 
-        /* LAB row (paired) */
-        var trL=document.createElement('tr');
-        trL.className='r-lab r-lab-pair';
-        trL.setAttribute('data-row-label',label);
-        trL.setAttribute('data-pair','lab');
-        trL.innerHTML=
-          '<td class="td-type lab">LAB</td>'+
-          '<td><input class="pti q" type="number" min="0" step="any" placeholder="0" data-role="qty"></td>'+
-          '<td><select class="pts">'+mkOpts(unitVal)+'</select></td>'+
-          '<td><input class="pti up" type="number" min="0" step="0.01" placeholder="0.00" data-role="unit"></td>'+
-          '<td class="td-s" data-role="total">$0.00</td>';
-        tbody.appendChild(trL);
-      }
+      /* MAT row */
+      var trM=document.createElement('tr');
+      trM.className='r-mat r-mat-pair'+(isAlt?' r-mat-alt':'');
+      trM.setAttribute('data-row-label',label);
+      trM.setAttribute('data-pair','mat');
+      trM.innerHTML=
+        '<td class="td-n" rowspan="2">'+label+srcHtml+noteHtml+'</td>'+
+        '<td class="td-type mat">MAT</td>'+
+        '<td><input class="pti q" type="number" min="0" step="any" placeholder="'+ph+'"'+
+          (qtyVal?' value="'+qtyVal+'"':'')+' data-role="qty"></td>'+
+        '<td><select class="pts">'+mkOpts(unitVal)+'</select></td>'+
+        '<td><input class="pti up" type="number" min="0" step="0.01" placeholder="0.00" data-role="unit"></td>'+
+        '<td class="td-s" data-role="total">$0.00</td>'+
+        '<td class="td-lt" rowspan="2" data-role="linetotal">$0.00</td>';
+      tbody.appendChild(trM);
+
+      /* LAB row (paired) */
+      var trL=document.createElement('tr');
+      trL.className='r-lab r-lab-pair'+(isAlt?' r-lab-alt':'');
+      trL.setAttribute('data-row-label',label);
+      trL.setAttribute('data-pair','lab');
+      trL.innerHTML=
+        '<td class="td-type lab">LAB</td>'+
+        '<td><input class="pti q" type="number" min="0" step="any" placeholder="0" data-role="qty"></td>'+
+        '<td><select class="pts">'+mkOpts(unitVal)+'</select></td>'+
+        '<td><input class="pti up" type="number" min="0" step="0.01" placeholder="0.00" data-role="unit"></td>'+
+        '<td class="td-s" data-role="total">$0.00</td>';
+      tbody.appendChild(trL);
+
+      pairIdx++;
     });
+
+    /* ── Standalone aggregate labor row ── */
+    if(labRow){
+      var labLabel=labRow.getAttribute('data-row-label')||'';
+      var lqi=labRow.querySelector('[data-role=qty]');
+      var lsi=labRow.querySelector('select');
+      var lpi=labRow.querySelector('[data-role=unit]');
+      var lqv=lqi?lqi.value:'';
+      var luv=lsi?lsi.value:'LS';
+      var lpv=lpi?lpi.value:'';
+      var lph=lqi?(lqi.placeholder||'0'):'0';
+
+      var trS=document.createElement('tr');
+      trS.className='r-lab r-lab-standalone';
+      trS.setAttribute('data-row-label',labLabel);
+      trS.setAttribute('data-lab','1');
+      trS.innerHTML=
+        '<td class="td-n-standalone" colspan="2">&#9654; '+labLabel+'</td>'+
+        '<td><input class="pti q" type="number" min="0" step="any" placeholder="'+lph+'"'+
+          (lqv?' value="'+lqv+'"':'')+' data-role="qty"></td>'+
+        '<td><select class="pts">'+mkOpts(luv)+'</select></td>'+
+        '<td><input class="pti up" type="number" min="0" step="0.01" placeholder="0.00"'+
+          (lpv?' value="'+lpv+'"':'')+' data-role="unit"></td>'+
+        '<td class="td-s" data-role="total">$0.00</td>'+
+        '<td class="td-lt" data-role="linetotal">$0.00</td>';
+      tbody.appendChild(trS);
+    }
+
     tbl.appendChild(tbody);
 
+    /* tfoot */
     var tfoot=document.createElement('tfoot');
     tfoot.innerHTML='<tr><td colspan="6">Division Total</td><td class="ft-total">$0.00</td></tr>';
     tbl.appendChild(tfoot);
@@ -5138,7 +5254,6 @@ function buildTables(){
         tr.querySelector('[data-role=total]').textContent=fmt(sub);
 
         if(tr.getAttribute('data-pair')==='mat'){
-          /* next row is the LAB pair */
           var trL=allTrs[i+1];
           var q2=parseFloat(trL.querySelector('[data-role=qty]').value)||0;
           var p2=parseFloat(trL.querySelector('[data-role=unit]').value)||0;
@@ -5148,7 +5263,7 @@ function buildTables(){
           tr.querySelector('[data-role=linetotal]').textContent=fmt(lineTotal);
           divTotal+=lineTotal;
 
-          /* sync MAT subtotal back to hidden original row */
+          /* sync back to hidden original */
           var origLabel=tr.getAttribute('data-row-label');
           var origRow=card.querySelector('.pricing-row.fixed:not(.labor-row)[data-row-label="'+CSS.escape(origLabel)+'"]');
           if(origRow){
@@ -5159,7 +5274,7 @@ function buildTables(){
           }
           i+=2;
         } else {
-          /* standalone labor row */
+          /* standalone labor */
           tr.querySelector('[data-role=linetotal]').textContent=fmt(sub);
           divTotal+=sub;
 
@@ -5185,7 +5300,7 @@ function buildTables(){
   });
 }
 
-/* run after ALL fix/quantity scripts have fired (they use up to 700ms timeouts) */
+/* run after ALL fix/quantity scripts (up to 700ms timeouts) */
 setTimeout(buildTables, 2000);
 })();
 </script>
