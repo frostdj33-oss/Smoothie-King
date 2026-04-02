@@ -3758,5 +3758,112 @@ if (document.readyState === 'loading') {
 })();
 
 </script>
+<script>
+(function () {
+var Q4 = {
+  'Metal Stud Framing \u2014 3-5/8" 16" OC':
+    {mq:380,mu:'LF',lq:380,lu:'LF',link:'https://www.homedepot.com/b/Building-Materials-Framing-Metal-Studs/N-5yc1vZar5h'},
+  '5/8" Type X Drywall \u2014 Standard Partitions':
+    {mq:2800,mu:'SF',lq:2800,lu:'SF',link:'https://www.usg.com/content/usgcom/en/products/panels-boards/drywall/sheetrock-brand-panels.html'},
+  '5/8" Glass Mat Tile Backer \u2014 Wet & Tile Areas':
+    {mq:200,mu:'SF',lq:200,lu:'SF',link:'https://www.usg.com/content/usgcom/en/products/panels-boards/specialty/durock-cement-board.html'},
+  '5/8" Type X Mold-Resistant Drywall \u2014 Wet Areas':
+    {mq:300,mu:'SF',lq:300,lu:'SF'},
+  '0.09" Non-Rated Smooth FRP Panels':
+    {mq:400,mu:'SF',lq:400,lu:'SF',link:'https://www.panolam.com/frp/'},
+  'Insulation \u2014 Batt, Sound & Thermal at Rated Walls':
+    {mq:600,mu:'SF',lq:600,lu:'SF'},
+  'Joint Compound, Corner Bead & Control Joints':
+    {mq:1,mu:'LS',lq:1,lu:'LS'},
+  'Blocking \u2014 Treated Wood for Shelving & Millwork Walls':
+    {mq:80,mu:'LF',lq:80,lu:'LF'},
+  'Fire-Stop System \u2014 All Wall, Ceiling & Roof Penetrations':
+    {mq:1,mu:'LS',lq:1,lu:'LS'},
+  'Restaurant-Compatible Clear Silicone Sealant \u2014 FRP & Millwork':
+    {mq:12,mu:'EA',lq:12,lu:'EA'},
+  '\u21aa Framing, Drywall, FRP & Finish Labor':
+    {mq:1,mu:'LS',lq:280,lu:'HR'},
+  'Door 1 \u2014 3\'x7\' Tempered Glass / Aluminum Frame (Front Entry)':
+    {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.crl-arch.com/products/entrance-door-systems/'},
+  'Door 2 \u2014 3\'x7\' Solid Core / HM Frame Painted (Restroom/Office)':
+    {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.curries.com/products/hollow-metal-doors/'},
+  'Door 3 \u2014 Existing Rear Exit Door Paint & Hardware Update':
+    {mq:1,mu:'EA',lq:1,lu:'EA'},
+  'Drive-Thru Window \u2014 Ready Access 275':
+    {mq:1,mu:'EA',lq:1,lu:'EA',link:'https://www.readyaccess.com/products/drive-thru-windows/ready-access-275/'},
+  'Hardware Group 2 \u2014 Front Entry Closer, Mortised Cylinder, Lockset':
+    {mq:1,mu:'SET',lq:1,lu:'SET'},
+  'Hardware Group 3 \u2014 Restroom Privacy Closer, Hinges, Mutes, Floor Stop':
+    {mq:1,mu:'SET',lq:1,lu:'SET'},
+  'Hardware Group 4 \u2014 Rear Exit Panic Device, Closer, Kick Plate, Hinges':
+    {mq:1,mu:'SET',lq:1,lu:'SET'},
+  'Surface-Mounted Double Hook \u2014 Restroom Doors (2 EA)':
+    {mq:2,mu:'EA',lq:2,lu:'EA'},
+  'Door Paint \u2014 All HM Doors & Frames, 2 Finish Coats':
+    {mq:1,mu:'GL',lq:1,lu:'GL'},
+  '\u21aa Door, Frame, Hardware & Drive-Thru Window Install Labor':
+    {mq:1,mu:'LS',lq:40,lu:'HR'},
+  'CL-1 Frost ClimaPlus 24x24" Tile \u2014 Black Exposed Grid (Customer Area)':
+    {mq:700,mu:'SF',lq:700,lu:'SF',link:'https://www.usg.com/content/usgcom/en/products/ceilings/acoustical-panels/frost-climaplus.html'},
+  'CL-2 Natura ClimaPlus Healthzone 24x24" Tile \u2014 White 9/16" Grid (Service)':
+    {mq:400,mu:'SF',lq:400,lu:'SF',link:'https://www.usg.com/content/usgcom/en/products/ceilings/acoustical-panels/natura-climaplus-healthzone.html'},
+  'CL-4 Sheetrock Lay-In 24x24" Square Edge Tile \u2014 White 15/16" Grid (Office)':
+    {mq:200,mu:'SF',lq:200,lu:'SF'},
+  'Suspended Grid System \u2014 Black Exposed Tee (Customer Area)':
+    {mq:700,mu:'SF',lq:700,lu:'SF'},
+  'Suspended Grid System \u2014 White 9/16" Exposed Tee (Service Area)':
+    {mq:400,mu:'SF',lq:400,lu:'SF'},
+  'Drywall Bulkhead & Soffits \u2014 Frame, Hang, Tape, Finish, Paint P-1a':
+    {mq:120,mu:'LF',lq:120,lu:'LF'},
+  'WD-1 Prefinished Red Oak Soffit Panel \u2014 7/8" x 4.5" x 7\'-0" Satin Finish':
+    {mq:20,mu:'LF',lq:20,lu:'LF',link:'https://www.timberlinewood.com/'},
+  '1/2" Water-Resistant OSB & MDF Soffit Backing':
+    {mq:120,mu:'SF',lq:120,lu:'SF'},
+  'FR-4 Water-Resistant Primer & Paint \u2014 Soffit Prep Coat':
+    {mq:1,mu:'GL',lq:1,lu:'GL'},
+  'Drywall Ceiling \u2014 Service Area, Restrooms & Back Area at 8\'-0" AFF':
+    {mq:350,mu:'SF',lq:350,lu:'SF'},
+  '\u21aa Ceiling, Grid, Tile, Soffit, Bulkhead & Wood Panel Install Labor':
+    {mq:1,mu:'LS',lq:160,lu:'HR'}
+};
+
+function applyQ(Q) {
+  document.querySelectorAll('.pricing-row.fixed').forEach(function(row) {
+    var label = (row.getAttribute('data-row-label') || '').trim();
+    var isLab = row.classList.contains('labor-row');
+    var d = Q[label];
+    if (!d) return;
+
+    var inputs = row.querySelectorAll('input[type=number]');
+    var sels   = row.querySelectorAll('select');
+    var qty    = isLab ? d.lq : d.mq;
+    var unit   = isLab ? d.lu : d.mu;
+    if (inputs[0] && qty) inputs[0].value = qty;
+    if (sels[0]   && unit) sels[0].value = unit;
+
+    if (!isLab && d.link) {
+      var labelEl = row.querySelector('.pricing-row-label');
+      if (labelEl && !labelEl.querySelector('.src-link')) {
+        var a = document.createElement('a');
+        a.className   = 'src-link';
+        a.href        = d.link;
+        a.target      = '_blank';
+        a.rel         = 'noopener';
+        a.textContent = '\u2197 Source';
+        labelEl.appendChild(a);
+      }
+    }
+  });
+  if (typeof recalcBidTotals === 'function') recalcBidTotals();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(function(){ applyQ(Q4); }, 600); });
+} else {
+  setTimeout(function(){ applyQ(Q4); }, 600);
+}
+})();
+
+</script>
 </body>
 </html>
