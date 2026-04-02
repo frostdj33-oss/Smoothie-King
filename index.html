@@ -1,3 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smoothie King #2431 — Bid Builder</title>
+<style>
+:root{--g9:#0F2208;--g8:#1A3A0F;--g7:#2C5F2E;--g6:#3D7A40;--g5:#4E9B52;--gg:rgba(44,95,46,0.25);--t9:#1C1710;--t8:#241E13;--t7:#2D2618;--t6:#3D3320;--t5:#6B5535;--t4:#8B7045;--t3:#A88B60;--t2:#C4A878;--t1:#DDD0AC;--t0:#EDE5CC;--tx1:#EDE5CC;--tx2:#C0AD88;--tx3:#8B7A5C;--red:#C0392B;--redd:rgba(192,57,43,0.15);--r:6px;--r2:10px;--r3:14px;--sh:0 4px 16px rgba(0,0,0,0.5);--sh2:0 8px 32px rgba(0,0,0,0.6);--font:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;--mono:'SF Mono','Fira Code',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:100vh;line-height:1.6;font-size:14px}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--t9)}::-webkit-scrollbar-thumb{background:var(--g7);border-radius:3px}
+
+.site-header{position:sticky;top:0;z-index:200;background:linear-gradient(135deg,var(--g9),var(--g8));border-bottom:1px solid var(--g7);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:58px;box-shadow:0 2px 20px rgba(0,0,0,0.6)}
+.header-left h1{font-size:16px;font-weight:800;color:var(--t0);letter-spacing:0.02em}
+.header-left p{font-size:11px;color:var(--t3);margin-top:1px}
+
+.nav-bar{background:var(--t8);border-bottom:1px solid var(--t6);padding:7px 24px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;position:sticky;top:58px;z-index:190}
+.nav-bar::-webkit-scrollbar{display:none}
+.nav-pill{flex-shrink:0;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--t6);background:transparent;color:var(--tx3);transition:all .18s;text-decoration:none}
+.nav-pill:hover{background:var(--g7);border-color:var(--g5);color:var(--t0)}
+
+.total-panel{position:sticky;top:100px;z-index:180;background:linear-gradient(135deg,var(--g8),var(--g9));border-bottom:2px solid var(--g7);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 16px rgba(0,0,0,0.5)}
+.total-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);font-weight:700}
+.total-amount{font-size:28px;font-weight:900;color:var(--t0);font-variant-numeric:tabular-nums;line-height:1.1}
+.total-subs{display:flex;gap:24px}
+.tsub{display:flex;flex-direction:column;align-items:flex-end}
+.tsub-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3)}
+.tsub-val{font-size:13px;font-weight:700;color:var(--tx2);font-variant-numeric:tabular-nums}
+
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 15px;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .18s;letter-spacing:.02em}
+.btn-green{background:var(--g7);color:var(--t0);border:1px solid var(--g6)}
+.btn-green:hover{background:var(--g6);box-shadow:0 0 18px var(--gg);transform:translateY(-1px)}
+
+.main-content{max-width:1120px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:16px}
+
+.section{background:var(--t8);border:1px solid var(--t6);border-radius:var(--r3);overflow:hidden;box-shadow:var(--sh);transition:box-shadow .2s}
+.section:hover{box-shadow:var(--sh2),0 0 0 1px rgba(44,95,46,.2)}
+
+.section-header{display:flex;align-items:center;gap:12px;padding:13px 18px;background:linear-gradient(135deg,var(--g9),rgba(26,58,15,.7));border-bottom:1px solid var(--g7)}
+.num{width:32px;height:32px;border-radius:50%;background:var(--g7);border:2px solid var(--g5);font-size:11px;font-weight:900;color:var(--t0);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px var(--gg)}
+.section-header h2{font-size:14px;font-weight:800;color:var(--t0);flex:1}
+.section-div-total{font-size:14px;font-weight:800;color:var(--g5);font-variant-numeric:tabular-nums}
+
+.card-material{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:14px 18px;background:var(--t7);border-bottom:1px solid var(--t6)}
+.zone-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--g5);font-weight:800;margin-bottom:3px}
+.item-name{font-size:13px;font-weight:800;color:var(--t0);margin-bottom:4px;line-height:1.3}
+.item-spec{font-size:11px;color:var(--tx2);line-height:1.5;margin-bottom:6px}
+.item-meta{display:flex;flex-wrap:wrap;gap:4px}
+.retailer-badge{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(44,95,46,.15);color:var(--g5);border:1px solid rgba(44,95,46,.22)}
+.note-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;background:var(--t6);color:var(--t2);white-space:nowrap;flex-shrink:0;height:fit-content}
+
+.card-scope{padding:13px 18px;background:var(--t8);border-bottom:1px solid var(--t6)}
+.scope-label,.pricing-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);font-weight:800;margin-bottom:9px;padding-bottom:5px;border-bottom:1px solid var(--t6)}
+.scope-tasks{list-style:none;display:flex;flex-direction:column;gap:2px;margin-bottom:9px}
+.scope-task-item{display:flex;align-items:flex-start;gap:7px;padding:6px 9px;border-radius:var(--r);background:var(--t7);border:1px solid transparent;transition:all .15s}
+.scope-task-item:hover{border-color:var(--t6)}
+.scope-task-item::before{content:"›";color:var(--g5);font-weight:900;font-size:14px;line-height:1.4;flex-shrink:0}
+.scope-task-text{font-size:12px;color:var(--tx2);line-height:1.5;flex:1}
+.scope-task-actions{display:flex;gap:3px;opacity:0;transition:opacity .15s;flex-shrink:0}
+.scope-task-item:hover .scope-task-actions{opacity:1}
+.stbtn{width:20px;height:20px;border-radius:3px;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.stbtn.edit{background:rgba(44,95,46,.2);color:var(--g5)}
+.stbtn.edit:hover{background:var(--g7);color:var(--t0)}
+.stbtn.del{background:var(--redd);color:#e07070}
+.stbtn.del:hover{background:var(--red);color:#fff}
+.add-scope-btn{padding:6px 12px;border-radius:var(--r);border:1px dashed var(--g7);background:transparent;color:var(--g5);font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;width:100%;margin-top:4px}
+.add-scope-btn:hover{background:rgba(44,95,46,.1);border-style:solid}
+
+.card-pricing{padding:13px 18px;background:var(--t8);display:flex;flex-direction:column;gap:3px}
+.pricing-row{display:grid;grid-template-columns:1fr 60px 72px 84px 92px;gap:6px;align-items:center;padding:5px 9px;border-radius:var(--r);border:1px solid transparent;background:var(--t7);transition:all .15s}
+.pricing-row:hover{border-color:var(--t6)}
+.pricing-row.labor-row{background:rgba(44,95,46,.06);border-color:rgba(44,95,46,.14)!important}
+.pricing-row-label{font-size:11px;color:var(--tx2);line-height:1.3}
+.pricing-row-label.labor{color:var(--g5);font-style:italic}
+.price-input{width:100%;padding:4px 6px;border-radius:4px;border:1px solid var(--t6);background:var(--t9);color:var(--tx1);font-size:12px;font-family:var(--mono);text-align:right;-moz-appearance:textfield;transition:border-color .15s}
+.price-input::-webkit-outer-spin-button,.price-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.price-input:focus{outline:none;border-color:var(--g6);background:var(--t8)}
+.unit-select{width:100%;padding:4px 4px;border-radius:4px;border:1px solid var(--t6);background:var(--t9);color:var(--tx2);font-size:11px;cursor:pointer}
+.unit-select:focus{outline:none;border-color:var(--g6)}
+.price-total{font-size:13px;font-weight:800;color:var(--g5);text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+.add-mat-btn{margin-top:5px;padding:5px 12px;border-radius:var(--r);border:1px dashed var(--t6);background:transparent;color:var(--tx3);font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;width:100%}
+.add-mat-btn:hover{border-color:var(--t4);color:var(--t2);background:rgba(107,85,53,.1)}
+
+.mat-link{display:inline-flex;align-items:center;gap:3px;color:var(--g5);text-decoration:none;font-size:10px;font-weight:700;margin-left:4px;padding:2px 5px;border-radius:3px;background:rgba(44,95,46,.1);border:1px solid rgba(44,95,46,.18);transition:all .15s}
+.mat-link:hover{background:rgba(44,95,46,.2);color:var(--t0)}
+.mat-link svg{width:9px;height:9px}
+
+@media print{.site-header,.nav-bar,.total-panel,.stbtn,.add-scope-btn,.add-mat-btn{display:none!important}body{background:#fff;color:#111}.section{border:1px solid #ccc;margin-bottom:14px}.section-header{background:#1A3A0F!important;-webkit-print-color-adjust:exact}.price-total{color:#1A5C1E!important}}
+@media(max-width:700px){.pricing-row{grid-template-columns:1fr}.total-subs{display:none}.main-content{padding:12px}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-left">
+    <h1>Smoothie King #2431 — Bid Builder</h1>
+    <p>3099 E. Main Street Suite D · Russellville AR 72802 · Project 26101.001 SMK</p>
+  </div>
+  <button class="btn btn-green" onclick="window.print()">⬇ Export PDF</button>
+</header>
+
+<nav class="nav-bar">
+  <a class="nav-pill" href="#s01">01 · Gen Conditions</a>
+  <a class="nav-pill" href="#s02">02 · Site Work</a>
+  <a class="nav-pill" href="#s03">03 · Structural</a>
+  <a class="nav-pill" href="#s04">04 · Framing</a>
+  <a class="nav-pill" href="#s05">05 · Doors</a>
+  <a class="nav-pill" href="#s06">06 · Ceilings</a>
+  <a class="nav-pill" href="#s07">07 · Flooring</a>
+  <a class="nav-pill" href="#s08">08 · Millwork</a>
+  <a class="nav-pill" href="#s09">09 · Specialties</a>
+  <a class="nav-pill" href="#s10">10 · Plumbing</a>
+  <a class="nav-pill" href="#s11">11 · Mechanical</a>
+  <a class="nav-pill" href="#s12">12 · Electrical</a>
+  <a class="nav-pill" href="#s13">13 · Low Voltage</a>
+  <a class="nav-pill" href="#s14">14 · Drive-Thru</a>
+  <a class="nav-pill" href="#s15">15 · Equipment</a>
+  <a class="nav-pill" href="#s16">16 · Graphics</a>
+</nav>
+
+<div class="total-panel">
+  <div>
+    <div class="total-label">Total Bid Estimate</div>
+    <div class="total-amount" id="grandTotal">$0.00</div>
+  </div>
+  <div class="total-subs">
+    <div class="tsub"><span class="tsub-label">Materials</span><span class="tsub-val" id="matTotal">$0.00</span></div>
+    <div class="tsub"><span class="tsub-label">Labor</span><span class="tsub-val" id="laborTotal">$0.00</span></div>
+    <div class="tsub"><span class="tsub-label">Priced</span><span class="tsub-val" id="divCount">0 / 16</span></div>
+  </div>
+</div>
+
+<div class="main-content">
 <section class="section" id="s01">
   <div class="section-header">
     <span class="num">01</span>
@@ -3110,3 +3244,64 @@
     </div>
   </div>
 </section>
+
+</div>
+
+<script>
+function fmt(n){return"$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function calcRow(input){
+  const row=input.closest(".pricing-row");
+  if(!row)return;
+  const q=parseFloat(row.querySelector("[data-role=qty]")?.value)||0;
+  const u=parseFloat(row.querySelector("[data-role=unit]")?.value)||0;
+  const t=row.querySelector("[data-role=total]");
+  if(t)t.textContent=fmt(q*u);
+  updateTotals();
+}
+function updateTotals(){
+  let grand=0,mat=0,lab=0,priced=0;
+  document.querySelectorAll(".section").forEach(sec=>{
+    let st=0;
+    sec.querySelectorAll(".pricing-row").forEach(row=>{
+      const q=parseFloat(row.querySelector("[data-role=qty]")?.value)||0;
+      const u=parseFloat(row.querySelector("[data-role=unit]")?.value)||0;
+      const v=q*u;st+=v;grand+=v;
+      if(row.classList.contains("labor-row"))lab+=v;else mat+=v;
+    });
+    const el=sec.querySelector(".section-div-total");
+    if(el)el.textContent=st>0?fmt(st):"";
+    if(st>0)priced++;
+  });
+  document.getElementById("grandTotal").textContent=fmt(grand);
+  document.getElementById("matTotal").textContent=fmt(mat);
+  document.getElementById("laborTotal").textContent=fmt(lab);
+  document.getElementById("divCount").textContent=priced+" / 16";
+}
+function addScope(id){
+  const list=document.getElementById(id);if(!list)return;
+  const text=prompt("Enter scope task:");if(!text)return;
+  const li=document.createElement("li");li.className="scope-task-item";
+  li.innerHTML=`<span class="scope-task-text">${text}</span><div class="scope-task-actions"><button class="stbtn edit" onclick="editScope(this)">✎</button><button class="stbtn del" onclick="removeScope(this)">✕</button></div>`;
+  list.appendChild(li);
+}
+function editScope(btn){
+  const s=btn.closest(".scope-task-item").querySelector(".scope-task-text");
+  const v=prompt("Edit:",s.textContent);if(v!==null)s.textContent=v;
+}
+function removeScope(btn){if(confirm("Remove?"))btn.closest(".scope-task-item").remove();}
+function addMaterialRow(btn){
+  const card=btn.closest(".card-pricing");
+  const label=prompt("Line item name:");if(!label)return;
+  const row=document.createElement("div");row.className="pricing-row";row.dataset.rowLabel=label;
+  row.innerHTML=`<div class="pricing-row-label">${label}</div><input class="price-input" type="number" placeholder="0" min="0" step="1" data-role="qty" oninput="calcRow(this)"><select class="unit-select" onchange="calcRow(this.parentElement.querySelector('[data-role=qty]'))"><option>LS</option><option>EA</option><option>SF</option><option>LF</option></select><input class="price-input" type="number" placeholder="$" min="0" step="0.01" data-role="unit" oninput="calcRow(this)"><div class="price-total" data-role="total">$0.00</div>`;
+  card.insertBefore(row,btn);
+}
+document.querySelectorAll(".section-header").forEach(h=>{
+  if(!h.querySelector(".section-div-total")){
+    const s=document.createElement("span");s.className="section-div-total";h.appendChild(s);
+  }
+});
+document.querySelectorAll(".price-input").forEach(el=>el.addEventListener("input",()=>calcRow(el)));
+</script>
+</body>
+</html>
