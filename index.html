@@ -3508,5 +3508,148 @@ showDiv('s01');
     if (lab) wrapper.appendChild(lab);
   });
 });
-</script></body>
+</script><script>
+(function () {
+
+/* ── 1. THEME ─────────────────────────────────────────────────── */
+var s = document.createElement('style');
+s.id = 'fix3';
+s.textContent = '\
+:root{--bg:#1a1b1e;--bg2:#25262b;--bg3:#2c2e33;--bd:#373a40;--bd2:#4a4d55;\
+--tx:#fff;--tx2:#c1c2c5;--tx3:#909296;--acc:#e8703a;--mat:#4dabf7;--lab:#51cf66;}\
+body{background:var(--bg)!important;color:var(--tx2)!important}\
+.pricing-row.fixed{background:var(--bg2)!important;border:1px solid var(--bd)!important;\
+border-radius:10px!important;margin-bottom:10px!important;overflow:hidden!important;padding:0!important}\
+.pricing-row.fixed:not(.labor-row){border-left:3px solid var(--mat)!important}\
+.pricing-row.labor-row.fixed{border-left:3px solid var(--lab)!important;\
+margin-top:-6px!important;border-top-left-radius:0!important;border-top-right-radius:0!important}\
+.pricing-row-label{display:flex!important;align-items:center!important;gap:8px!important;\
+padding:9px 14px!important;font-size:.85rem!important;font-weight:600!important;\
+color:var(--tx)!important;background:var(--bg3)!important;border-bottom:1px solid var(--bd)!important}\
+.row-badge{display:inline-flex;align-items:center;padding:1px 7px;border-radius:4px;\
+font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;flex-shrink:0}\
+.row-badge.mat{background:rgba(77,171,247,.15);color:var(--mat);border:1px solid rgba(77,171,247,.3)}\
+.row-badge.lab{background:rgba(81,207,102,.15);color:var(--lab);border:1px solid rgba(81,207,102,.3)}\
+.pricing-row input[type=number]{background:var(--bg)!important;color:var(--tx)!important;\
+border:1px solid var(--bd2)!important;border-radius:6px!important;\
+padding:8px 10px!important;font-size:.95rem!important;min-height:40px!important}\
+.pricing-row select{background:var(--bg)!important;color:var(--tx2)!important;\
+border:1px solid var(--bd2)!important;border-radius:6px!important;padding:6px 8px!important;min-height:40px!important}\
+.pricing-subtotal,.pricing-total{color:var(--acc)!important;font-weight:700!important}\
+.src-link{font-size:.7rem;color:var(--mat)!important;text-decoration:none;\
+margin-left:auto;opacity:.75;white-space:nowrap}\
+.src-link:hover{opacity:1;text-decoration:underline}\
+.bid-card-name{font-size:.75rem;font-weight:700;color:var(--tx3);\
+text-transform:uppercase;letter-spacing:.07em;padding:4px 0 5px}\
+h1,h2,h3{color:var(--tx)!important}\
+.grand-total-panel{background:var(--bg2)!important;border:2px solid var(--acc)!important;border-radius:10px!important}\
+.grand-total-panel .gt-item{background:var(--bg2)!important}\
+.grand-total-panel .gt-item.grand{background:var(--bg)!important}\
+.grand-total-panel .gt-value{color:var(--tx)!important}\
+.grand-total-panel .gt-item.grand .gt-value{color:var(--acc)!important}\
+button,.btn{background:var(--acc)!important;color:#fff!important;border:none!important;border-radius:6px!important}\
+';
+document.head.appendChild(s);
+
+/* ── 2. QUANTITIES — DIV 01-03 ────────────────────────────────── */
+var Q = {
+  'General Conditions / Superintendent':
+    {mq:12,mu:'WK',lq:12,lu:'WK'},
+  'Building Permit & All Inspection Fees':
+    {mq:1,mu:'LS',lq:1,lu:'LS'},
+  'Performance & Payment Bond (100% of contract)':
+    {mq:1,mu:'LS',lq:0,lu:'LS'},
+  'Insurance \u2014 GL, Auto, Workers Comp':
+    {mq:1,mu:'LS',lq:0,lu:'LS'},
+  'Temporary Facilities \u2014 Power, Toilets, Dumpster':
+    {mq:12,mu:'WK',lq:12,lu:'WK'},
+  'Equipment Delivery Coordination & Forklift':
+    {mq:2,mu:'DAY',lq:2,lu:'DAY'},
+  'Final Clean & Attic Stock Delivery':
+    {mq:1,mu:'LS',lq:8,lu:'HR'},
+  'Closeout Package \u2014 As-Builts, O&M Manuals, Warranties, Lien Waivers':
+    {mq:1,mu:'LS',lq:1,lu:'LS'},
+  '\u21aa GC Fee / Overhead & Profit':
+    {mq:1,mu:'LS',lq:0,lu:'LS'},
+  '6" Steel Bollards \u2014 concrete filled, painted':
+    {mq:6,mu:'EA',lq:6,lu:'EA',link:'https://www.mcmaster.com/bollards/'},
+  'Concrete Paving Sealant & Expansion Joint Material':
+    {mq:50,mu:'LF',lq:50,lu:'LF'},
+  'Underground Conduit \u2014 1-1/4" for Drive-Thru Cable/Power':
+    {mq:100,mu:'LF',lq:100,lu:'LF'},
+  'Detector Loop \u2014 72" PVC w/ Loop, 3/4" SCH 40 Conduit to Panel':
+    {mq:1,mu:'EA',lq:1,lu:'EA'},
+  'HC Parking Protection & Restoration (if damaged)':
+    {mq:1,mu:'LS',lq:1,lu:'LS'},
+  '\u21aa Site Work Labor \u2014 Bollards, Conduit, Sealant, HC Protection':
+    {mq:1,mu:'LS',lq:40,lu:'HR'},
+  'Concrete \u2014 4" Slab on Grade, 4,000 PSI':
+    {mq:17,mu:'CY',lq:17,lu:'CY',link:'https://www.concretenetwork.com/concrete-prices/'},
+  'Rebar \u2014 #3 @ 14" OC Both Ways':
+    {mq:2300,mu:'LF',lq:2300,lu:'LF',link:'https://www.nucor.com/rebar/'},
+  'Epoxy Grout & Dowels \u2014 #3 x 1\'-6" @ 18" OC':
+    {mq:97,mu:'EA',lq:97,lu:'EA'},
+  'RTU Roof Opening Framing \u2014 L3x3x3/16 Steel Angles':
+    {mq:16,mu:'LF',lq:16,lu:'LF'},
+  'Mechanical Curb Support \u2014 HSS Blocking & L2x2 Welded Assembly':
+    {mq:1,mu:'EA',lq:1,lu:'EA'},
+  'Concentrated Load Framing \u2014 L2x2x3/16 Joist Reinforcing':
+    {mq:6,mu:'EA',lq:6,lu:'EA'},
+  'Slab Demo & Trench Excavation for Under-Floor Plumbing':
+    {mq:150,mu:'LF',lq:150,lu:'LF'},
+  'Roof Penetrations \u2014 Landlord Roofer Coordination & Cost':
+    {mq:8,mu:'EA',lq:8,lu:'EA'},
+  '\u21aa Structural Labor \u2014 Slab, Forming, Steel, Roof Framing':
+    {mq:1,mu:'LS',lq:120,lu:'HR'}
+};
+
+/* ── 3. APPLY ─────────────────────────────────────────────────── */
+function applyAll() {
+  document.querySelectorAll('.pricing-row.fixed').forEach(function(row) {
+    var label = (row.getAttribute('data-row-label') || '').trim();
+    var isLab = row.classList.contains('labor-row');
+    var labelEl = row.querySelector('.pricing-row-label');
+
+    if (labelEl && !labelEl.querySelector('.row-badge')) {
+      var badge = document.createElement('span');
+      badge.className = 'row-badge ' + (isLab ? 'lab' : 'mat');
+      badge.textContent = isLab ? 'LAB' : 'MAT';
+      labelEl.insertBefore(badge, labelEl.firstChild);
+
+      var d = Q[label];
+      if (d && d.link && !isLab) {
+        var a = document.createElement('a');
+        a.className = 'src-link';
+        a.href = d.link;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = '\u2197 Source';
+        labelEl.appendChild(a);
+      }
+    }
+
+    var d = Q[label];
+    if (d) {
+      var inputs = row.querySelectorAll('input[type=number]');
+      var sels = row.querySelectorAll('select');
+      var qty = isLab ? d.lq : d.mq;
+      var unit = isLab ? d.lu : d.mu;
+      if (inputs[0] && qty) inputs[0].value = qty;
+      if (sels[0] && unit) sels[0].value = unit;
+    }
+  });
+
+  if (typeof recalcBidTotals === 'function') recalcBidTotals();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll,400); });
+} else {
+  setTimeout(applyAll, 400);
+}
+
+})();
+
+</script>
+</body>
 </html>
