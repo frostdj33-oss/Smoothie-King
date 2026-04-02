@@ -3447,7 +3447,7 @@ function updateTotals(){
   let grand=0, mat=0, lab=0, priced=0;
   document.querySelectorAll('.section').forEach(sec => {
     let st = 0;
-    sec.querySelectorAll('.pricing-row').forEach(row => {
+    sec.querySelectorAll('.pricing-row.fixed').forEach(row => {
       const q = parseFloat(row.querySelector('[data-role=qty]')?.value)||0;
       const u = parseFloat(row.querySelector('[data-role=unit]')?.value)||0;
       const v = q*u; st+=v; grand+=v;
@@ -3498,9 +3498,52 @@ showDiv('s01');
 var UNITS=['LS','EA','LF','SF','CY','HR','DAY','WK','MO','GL','BG','SH','CT','SET','TON'];
 function makeOpts(sel){return UNITS.map(function(u){return'<option value="'+u+'"'+(u===sel?' selected':'')+'>'+u+'</option>';}).join('');}
 function fmtMoney(n){return'$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function recalcBidTotals(){var tM=0,tL=0;document.querySelectorAll('.pricing-row').forEach(function(r){var mq=parseFloat(r.querySelector('.mat-qty')&&r.querySelector('.mat-qty').value||0);var mp=parseFloat(r.querySelector('.mat-price')&&r.querySelector('.mat-price').value||0);var ms=mq*mp;var lq=parseFloat(r.querySelector('.lab-qty')&&r.querySelector('.lab-qty').value||0);var lp=parseFloat(r.querySelector('.lab-price')&&r.querySelector('.lab-price').value||0);var ls=lq*lp;var el;el=r.querySelector('.mat-subtotal');if(el)el.textContent=fmtMoney(ms);el=r.querySelector('.lab-subtotal');if(el)el.textContent=fmtMoney(ls);el=r.querySelector('.line-total-cell');if(el)el.textContent=fmtMoney(ms+ls);tM+=ms;tL+=ls;});var el;el=document.getElementById('gt-mat');if(el)el.textContent=fmtMoney(tM);el=document.getElementById('gt-lab');if(el)el.textContent=fmtMoney(tL);el=document.getElementById('gt-grand');if(el)el.textContent=fmtMoney(tM+tL);}
-function buildRows(){document.querySelectorAll('.pricing-row').forEach(function(r){if(r.querySelector('.sub-row'))return;var n=r.querySelector('.item-name,label,a,strong');var nm=n?n.outerHTML:'';r.innerHTML='<div class="item-name">'+nm+'</div><div class="sub-rows"><div class="sub-row"><span class="sub-row-label mat">MAT</span><input type="number" class="mat-qty" min="0" step="any" placeholder="Qty"><select class="mat-unit">'+makeOpts('LS')+'</select><input type="number" class="unit-price mat-price" min="0" step="0.01" placeholder="Unit $"><span class="sub-row-subtotal mat-subtotal">/bin/bash.00</span></div><div class="sub-row"><span class="sub-row-label lab">LAB</span><input type="number" class="lab-qty" min="0" step="any" placeholder="Qty"><select class="lab-unit">'+makeOpts('HR')+'</select><input type="number" class="unit-price lab-price" min="0" step="0.01" placeholder="Unit $"><span class="sub-row-subtotal lab-subtotal">/bin/bash.00</span></div></div><div class="line-total-cell">/bin/bash.00</div>';});recalcBidTotals();}
+function recalcBidTotals(){var tM=0,tL=0;document.querySelectorAll('.pricing-row.fixed').forEach(function(r){var mq=parseFloat(r.querySelector('.mat-qty')&&r.querySelector('.mat-qty').value||0);var mp=parseFloat(r.querySelector('.mat-price')&&r.querySelector('.mat-price').value||0);var ms=mq*mp;var lq=parseFloat(r.querySelector('.lab-qty')&&r.querySelector('.lab-qty').value||0);var lp=parseFloat(r.querySelector('.lab-price')&&r.querySelector('.lab-price').value||0);var ls=lq*lp;var el;el=r.querySelector('.mat-subtotal');if(el)el.textContent=fmtMoney(ms);el=r.querySelector('.lab-subtotal');if(el)el.textContent=fmtMoney(ls);el=r.querySelector('.line-total-cell');if(el)el.textContent=fmtMoney(ms+ls);tM+=ms;tL+=ls;});var el;el=document.getElementById('gt-mat');if(el)el.textContent=fmtMoney(tM);el=document.getElementById('gt-lab');if(el)el.textContent=fmtMoney(tL);el=document.getElementById('gt-grand');if(el)el.textContent=fmtMoney(tM+tL);}
+function buildRows(){document.querySelectorAll('.pricing-row.fixed').forEach(function(r){if(r.querySelector('.sub-row'))return;var n=r.querySelector('.item-name,label,a,strong');var nm=n?n.outerHTML:'';r.innerHTML='<div class="item-name">'+nm+'</div><div class="sub-rows"><div class="sub-row"><span class="sub-row-label mat">MAT</span><input type="number" class="mat-qty" min="0" step="any" placeholder="Qty"><select class="mat-unit">'+makeOpts('LS')+'</select><input type="number" class="unit-price mat-price" min="0" step="0.01" placeholder="Unit $"><span class="sub-row-subtotal mat-subtotal">/bin/bash.00</span></div><div class="sub-row"><span class="sub-row-label lab">LAB</span><input type="number" class="lab-qty" min="0" step="any" placeholder="Qty"><select class="lab-unit">'+makeOpts('HR')+'</select><input type="number" class="unit-price lab-price" min="0" step="0.01" placeholder="Unit $"><span class="sub-row-subtotal lab-subtotal">/bin/bash.00</span></div></div><div class="line-total-cell">/bin/bash.00</div>';});recalcBidTotals();}
 document.addEventListener('input',function(e){if(e.target.closest('.pricing-row'))recalcBidTotals();});
 document.addEventListener('DOMContentLoaded',function(){buildRows();});
+</script><script>
+var BID_QTY={
+'General Conditions / Superintendent':{mq:12,mu:'WK',lq:12,lu:'WK'},
+'Building Permit & All Inspection Fees':{mq:1,mu:'LS',lq:1,lu:'LS'},
+'Performance & Payment Bond (100% of contract)':{mq:1,mu:'LS',lq:0,lu:'LS'},
+'Insurance — GL, Auto, Workers Comp':{mq:1,mu:'LS',lq:0,lu:'LS'},
+'Temporary Facilities — Power, Toilets, Dumpster':{mq:12,mu:'WK',lq:12,lu:'WK'},
+'Equipment Delivery Coordination & Forklift':{mq:2,mu:'DAY',lq:2,lu:'DAY'},
+'Final Clean & Attic Stock Delivery':{mq:1,mu:'LS',lq:1,lu:'LS'},
+'Closeout Package — As-Builts, O&M Manuals, Warranties, Lien Waivers':{mq:1,mu:'LS',lq:1,lu:'LS'},
+'↪ GC Fee / Overhead & Profit':{mq:1,mu:'LS',lq:0,lu:'LS'},
+'6" Steel Bollards — concrete filled, painted':{mq:6,mu:'EA',lq:6,lu:'EA'},
+'Concrete Paving Sealant & Expansion Joint Material':{mq:50,mu:'LF',lq:50,lu:'LF'},
+'Underground Conduit — 1-1/4" for Drive-Thru Cable/Power':{mq:100,mu:'LF',lq:100,lu:'LF'},
+'Detector Loop — 72" PVC w/ Loop, 3/4" SCH 40 Conduit to Panel':{mq:1,mu:'EA',lq:1,lu:'EA'},
+'HC Parking Protection & Restoration (if damaged)':{mq:1,mu:'LS',lq:1,lu:'LS'},
+'↪ Site Work Labor — Bollards, Conduit, Sealant, HC Protection':{mq:1,mu:'LS',lq:40,lu:'HR'},
+'Concrete — 4" Slab on Grade, 4,000 PSI':{mq:17,mu:'CY',lq:17,lu:'CY'},
+'Rebar — #3 @ 14" OC Both Ways':{mq:2500,mu:'LF',lq:2500,lu:'LF'},
+'Epoxy Grout & Dowels — #3 x 1'-6" @ 18" OC':{mq:97,mu:'EA',lq:97,lu:'EA'},
+'RTU Roof Opening Framing — L3x3x3/16 Steel Angles':{mq:20,mu:'LF',lq:20,lu:'LF'},
+'Mechanical Curb Support — HSS Blocking & L2x2 Welded Assembly':{mq:1,mu:'EA',lq:1,lu:'EA'},
+'Concentrated Load Framing — L2x2x3/16 Joist Reinforcing':{mq:6,mu:'EA',lq:6,lu:'EA'},
+'Slab Demo & Trench Excavation for Under-Floor Plumbing':{mq:150,mu:'LF',lq:150,lu:'LF'},
+'Roof Penetrations — Landlord Roofer Coordination & Cost':{mq:8,mu:'EA',lq:8,lu:'EA'},
+'↪ Structural Labor — Slab, Forming, Steel, Roof Framing':{mq:1,mu:'LS',lq:120,lu:'HR'}
+};
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(function(){
+    document.querySelectorAll('[class*=pricing-row]').forEach(function(r){
+      var nameEl=r.querySelector('.pricing-label,.item-name,label');
+      var name=nameEl.textContent.trim();
+      var d=BID_QTY[name];
+      var mq=r.querySelector('.mat-qty');var mu=r.querySelector('.mat-unit');
+      var lq=r.querySelector('.lab-qty');var lu=r.querySelector('.lab-unit');
+      if(mq)mq.value=d.mq;
+      if(mu)mu.value=d.mu;
+      if(lq&&d.lq)lq.value=d.lq;
+      if(lu)lu.value=d.lu;
+    });
+    if(typeof recalcBidTotals==='function')recalcBidTotals();
+  },500);
+});
 </script></body>
 </html>
