@@ -5,89 +5,122 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Smoothie King #2431 — Bid Builder</title>
 <style>
-:root{--g9:#0F2208;--g8:#1A3A0F;--g7:#2C5F2E;--g6:#3D7A40;--g5:#4E9B52;--gg:rgba(44,95,46,0.25);--t9:#1C1710;--t8:#241E13;--t7:#2D2618;--t6:#3D3320;--t5:#6B5535;--t4:#8B7045;--t3:#A88B60;--t2:#C4A878;--t1:#DDD0AC;--t0:#EDE5CC;--tx1:#EDE5CC;--tx2:#C0AD88;--tx3:#8B7A5C;--red:#C0392B;--redd:rgba(192,57,43,0.15);--r:6px;--r2:10px;--r3:14px;--sh:0 4px 16px rgba(0,0,0,0.5);--sh2:0 8px 32px rgba(0,0,0,0.6);--font:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;--mono:'SF Mono','Fira Code',monospace}
+:root{
+  --b9:#0F0A05;--b8:#1A1008;--b7:#231508;--b6:#2D1C0A;
+  --b5:#3D280F;--b4:#5C3A18;--b3:#8B5E2A;--b2:#B8863F;
+  --b1:#D4AA6A;--b0:#EDE0CC;
+  --acc:#A0522D;--acc2:#C4813F;--acc3:#D4AA6A;
+  --tx1:#EDE0CC;--tx2:#C4A878;--tx3:#8B7055;--tx4:#5C4830;
+  --red:#C0392B;--redd:rgba(192,57,43,0.15);
+  --glow:rgba(160,82,45,0.25);
+  --r:6px;--r2:10px;--r3:14px;
+  --sh:0 4px 18px rgba(0,0,0,0.55);--sh2:0 8px 32px rgba(0,0,0,0.65);
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono:'SF Mono','Fira Code',monospace
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:100vh;line-height:1.6;font-size:14px}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--t9)}::-webkit-scrollbar-thumb{background:var(--g7);border-radius:3px}
+body{font-family:var(--font);background:var(--b8);color:var(--tx1);min-height:100vh;line-height:1.6;font-size:14px}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--b9)}::-webkit-scrollbar-thumb{background:var(--b3);border-radius:3px}
 
-.site-header{position:sticky;top:0;z-index:200;background:linear-gradient(135deg,var(--g9),var(--g8));border-bottom:1px solid var(--g7);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:58px;box-shadow:0 2px 20px rgba(0,0,0,0.6)}
-.header-left h1{font-size:16px;font-weight:800;color:var(--t0);letter-spacing:0.02em}
-.header-left p{font-size:11px;color:var(--t3);margin-top:1px}
+/* HEADER */
+.site-header{position:sticky;top:0;z-index:200;background:linear-gradient(135deg,var(--b9),var(--b8));border-bottom:1px solid var(--b4);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:58px;box-shadow:0 2px 20px rgba(0,0,0,0.7)}
+.header-left h1{font-size:16px;font-weight:800;color:var(--b0);letter-spacing:.02em}
+.header-left p{font-size:11px;color:var(--b2);margin-top:1px}
 
-.nav-bar{background:var(--t8);border-bottom:1px solid var(--t6);padding:7px 24px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;position:sticky;top:58px;z-index:190}
-.nav-bar::-webkit-scrollbar{display:none}
-.nav-pill{flex-shrink:0;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--t6);background:transparent;color:var(--tx3);transition:all .18s;text-decoration:none}
-.nav-pill:hover{background:var(--g7);border-color:var(--g5);color:var(--t0)}
+/* DIVISION SELECTOR */
+.div-selector-bar{background:var(--b7);border-bottom:1px solid var(--b5);padding:10px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:58px;z-index:190;box-shadow:0 2px 10px rgba(0,0,0,0.4)}
+.div-selector-label{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap}
+.div-select{padding:7px 12px;border-radius:var(--r);border:1px solid var(--b4);background:var(--b6);color:var(--tx1);font-size:13px;font-weight:600;cursor:pointer;min-width:260px;transition:border-color .15s}
+.div-select:focus{outline:none;border-color:var(--acc2)}
+.div-nav-btns{display:flex;gap:6px;margin-left:auto}
 
-.total-panel{position:sticky;top:100px;z-index:180;background:linear-gradient(135deg,var(--g8),var(--g9));border-bottom:2px solid var(--g7);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 16px rgba(0,0,0,0.5)}
-.total-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);font-weight:700}
-.total-amount{font-size:28px;font-weight:900;color:var(--t0);font-variant-numeric:tabular-nums;line-height:1.1}
+/* TOTAL PANEL */
+.total-panel{position:sticky;top:100px;z-index:180;background:linear-gradient(135deg,var(--b7),var(--b8));border-bottom:2px solid var(--b4);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 16px rgba(0,0,0,0.5)}
+.total-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--b2);font-weight:700}
+.total-amount{font-size:28px;font-weight:900;color:var(--b0);font-variant-numeric:tabular-nums;line-height:1.1}
 .total-subs{display:flex;gap:24px}
 .tsub{display:flex;flex-direction:column;align-items:flex-end}
 .tsub-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3)}
 .tsub-val{font-size:13px;font-weight:700;color:var(--tx2);font-variant-numeric:tabular-nums}
 
+/* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 15px;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .18s;letter-spacing:.02em}
-.btn-green{background:var(--g7);color:var(--t0);border:1px solid var(--g6)}
-.btn-green:hover{background:var(--g6);box-shadow:0 0 18px var(--gg);transform:translateY(-1px)}
+.btn-brown{background:var(--acc);color:var(--b0);border:1px solid var(--acc2)}
+.btn-brown:hover{background:var(--acc2);box-shadow:0 0 18px var(--glow);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--tx2);border:1px solid var(--b4)}
+.btn-outline:hover{background:var(--b6);border-color:var(--b3);color:var(--b0)}
 
-.main-content{max-width:1120px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:16px}
+/* MAIN */
+.main-content{max-width:1100px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:12px}
 
-.section{background:var(--t8);border:1px solid var(--t6);border-radius:var(--r3);overflow:hidden;box-shadow:var(--sh);transition:box-shadow .2s}
-.section:hover{box-shadow:var(--sh2),0 0 0 1px rgba(44,95,46,.2)}
+/* SECTION */
+.section{background:var(--b7);border:1px solid var(--b5);border-radius:var(--r3);overflow:hidden;box-shadow:var(--sh);transition:box-shadow .2s}
+.section.hidden{display:none}
+.section:hover{box-shadow:var(--sh2),0 0 0 1px rgba(160,82,45,.2)}
 
-.section-header{display:flex;align-items:center;gap:12px;padding:13px 18px;background:linear-gradient(135deg,var(--g9),rgba(26,58,15,.7));border-bottom:1px solid var(--g7)}
-.num{width:32px;height:32px;border-radius:50%;background:var(--g7);border:2px solid var(--g5);font-size:11px;font-weight:900;color:var(--t0);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px var(--gg)}
-.section-header h2{font-size:14px;font-weight:800;color:var(--t0);flex:1}
-.section-div-total{font-size:14px;font-weight:800;color:var(--g5);font-variant-numeric:tabular-nums}
+/* SECTION HEADER — clickable accordion */
+.section-header{display:flex;align-items:center;gap:12px;padding:13px 18px;background:linear-gradient(135deg,var(--b9),rgba(35,21,8,.8));border-bottom:1px solid var(--b4);cursor:pointer;user-select:none;transition:background .18s}
+.section-header:hover{background:linear-gradient(135deg,var(--b8),rgba(45,28,10,.9))}
+.num{width:32px;height:32px;border-radius:50%;background:var(--acc);border:2px solid var(--acc2);font-size:11px;font-weight:900;color:var(--b0);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px var(--glow)}
+.section-header h2{font-size:14px;font-weight:800;color:var(--b0);flex:1}
+.section-div-total{font-size:14px;font-weight:800;color:var(--acc3);font-variant-numeric:tabular-nums;margin-right:8px}
+.section-toggle{font-size:18px;color:var(--tx3);transition:transform .2s;flex-shrink:0}
+.section.open .section-toggle{transform:rotate(180deg)}
 
-.card-material{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:14px 18px;background:var(--t7);border-bottom:1px solid var(--t6)}
-.zone-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--g5);font-weight:800;margin-bottom:3px}
-.item-name{font-size:13px;font-weight:800;color:var(--t0);margin-bottom:4px;line-height:1.3}
+/* SECTION BODY */
+.section-body{display:none}
+.section.open .section-body{display:block}
+
+/* MATERIAL CARD */
+.card-material{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:14px 18px;background:var(--b6);border-bottom:1px solid var(--b5)}
+.zone-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--acc2);font-weight:800;margin-bottom:3px}
+.item-name{font-size:13px;font-weight:800;color:var(--b0);margin-bottom:4px;line-height:1.3}
 .item-spec{font-size:11px;color:var(--tx2);line-height:1.5;margin-bottom:6px}
 .item-meta{display:flex;flex-wrap:wrap;gap:4px}
-.retailer-badge{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(44,95,46,.15);color:var(--g5);border:1px solid rgba(44,95,46,.22)}
-.note-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;background:var(--t6);color:var(--t2);white-space:nowrap;flex-shrink:0;height:fit-content}
+.retailer-badge{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(160,82,45,.15);color:var(--acc2);border:1px solid rgba(160,82,45,.25)}
+.note-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;background:var(--b5);color:var(--b2);white-space:nowrap;flex-shrink:0;height:fit-content}
 
-.card-scope{padding:13px 18px;background:var(--t8);border-bottom:1px solid var(--t6)}
-.scope-label,.pricing-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);font-weight:800;margin-bottom:9px;padding-bottom:5px;border-bottom:1px solid var(--t6)}
+/* SCOPE */
+.card-scope{padding:13px 18px;background:var(--b7);border-bottom:1px solid var(--b5)}
+.scope-label,.pricing-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--b2);font-weight:800;margin-bottom:9px;padding-bottom:5px;border-bottom:1px solid var(--b5)}
 .scope-tasks{list-style:none;display:flex;flex-direction:column;gap:2px;margin-bottom:9px}
-.scope-task-item{display:flex;align-items:flex-start;gap:7px;padding:6px 9px;border-radius:var(--r);background:var(--t7);border:1px solid transparent;transition:all .15s}
-.scope-task-item:hover{border-color:var(--t6)}
-.scope-task-item::before{content:"›";color:var(--g5);font-weight:900;font-size:14px;line-height:1.4;flex-shrink:0}
+.scope-task-item{display:flex;align-items:flex-start;gap:7px;padding:6px 9px;border-radius:var(--r);background:var(--b6);border:1px solid transparent;transition:all .15s}
+.scope-task-item:hover{border-color:var(--b5)}
+.scope-task-item::before{content:"›";color:var(--acc2);font-weight:900;font-size:14px;line-height:1.4;flex-shrink:0}
 .scope-task-text{font-size:12px;color:var(--tx2);line-height:1.5;flex:1}
 .scope-task-actions{display:flex;gap:3px;opacity:0;transition:opacity .15s;flex-shrink:0}
 .scope-task-item:hover .scope-task-actions{opacity:1}
 .stbtn{width:20px;height:20px;border-radius:3px;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.stbtn.edit{background:rgba(44,95,46,.2);color:var(--g5)}
-.stbtn.edit:hover{background:var(--g7);color:var(--t0)}
+.stbtn.edit{background:rgba(160,82,45,.2);color:var(--acc2)}
+.stbtn.edit:hover{background:var(--acc);color:var(--b0)}
 .stbtn.del{background:var(--redd);color:#e07070}
 .stbtn.del:hover{background:var(--red);color:#fff}
-.add-scope-btn{padding:6px 12px;border-radius:var(--r);border:1px dashed var(--g7);background:transparent;color:var(--g5);font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;width:100%;margin-top:4px}
-.add-scope-btn:hover{background:rgba(44,95,46,.1);border-style:solid}
+.add-scope-btn{padding:6px 12px;border-radius:var(--r);border:1px dashed var(--b4);background:transparent;color:var(--acc2);font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;width:100%;margin-top:4px}
+.add-scope-btn:hover{background:rgba(160,82,45,.1);border-style:solid}
 
-.card-pricing{padding:13px 18px;background:var(--t8);display:flex;flex-direction:column;gap:3px}
-.pricing-row{display:grid;grid-template-columns:1fr 60px 72px 84px 92px;gap:6px;align-items:center;padding:5px 9px;border-radius:var(--r);border:1px solid transparent;background:var(--t7);transition:all .15s}
-.pricing-row:hover{border-color:var(--t6)}
-.pricing-row.labor-row{background:rgba(44,95,46,.06);border-color:rgba(44,95,46,.14)!important}
+/* PRICING */
+.card-pricing{padding:13px 18px;background:var(--b7);display:flex;flex-direction:column;gap:3px}
+.pricing-row{display:grid;grid-template-columns:1fr 60px 72px 84px 92px;gap:6px;align-items:center;padding:5px 9px;border-radius:var(--r);border:1px solid transparent;background:var(--b6);transition:all .15s}
+.pricing-row:hover{border-color:var(--b5)}
+.pricing-row.labor-row{background:rgba(160,82,45,.06);border-color:rgba(160,82,45,.15)!important}
 .pricing-row-label{font-size:11px;color:var(--tx2);line-height:1.3}
-.pricing-row-label.labor{color:var(--g5);font-style:italic}
-.price-input{width:100%;padding:4px 6px;border-radius:4px;border:1px solid var(--t6);background:var(--t9);color:var(--tx1);font-size:12px;font-family:var(--mono);text-align:right;-moz-appearance:textfield;transition:border-color .15s}
+.pricing-row-label.labor{color:var(--acc2);font-style:italic}
+.price-input{width:100%;padding:4px 6px;border-radius:4px;border:1px solid var(--b5);background:var(--b9);color:var(--tx1);font-size:12px;font-family:var(--mono);text-align:right;-moz-appearance:textfield;transition:border-color .15s}
 .price-input::-webkit-outer-spin-button,.price-input::-webkit-inner-spin-button{-webkit-appearance:none}
-.price-input:focus{outline:none;border-color:var(--g6);background:var(--t8)}
-.unit-select{width:100%;padding:4px 4px;border-radius:4px;border:1px solid var(--t6);background:var(--t9);color:var(--tx2);font-size:11px;cursor:pointer}
-.unit-select:focus{outline:none;border-color:var(--g6)}
-.price-total{font-size:13px;font-weight:800;color:var(--g5);text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
-.add-mat-btn{margin-top:5px;padding:5px 12px;border-radius:var(--r);border:1px dashed var(--t6);background:transparent;color:var(--tx3);font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;width:100%}
-.add-mat-btn:hover{border-color:var(--t4);color:var(--t2);background:rgba(107,85,53,.1)}
+.price-input:focus{outline:none;border-color:var(--acc);background:var(--b8)}
+.unit-select{width:100%;padding:4px 4px;border-radius:4px;border:1px solid var(--b5);background:var(--b9);color:var(--tx2);font-size:11px;cursor:pointer}
+.unit-select:focus{outline:none;border-color:var(--acc)}
+.price-total{font-size:13px;font-weight:800;color:var(--acc3);text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+.add-mat-btn{margin-top:5px;padding:5px 12px;border-radius:var(--r);border:1px dashed var(--b5);background:transparent;color:var(--tx3);font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;width:100%}
+.add-mat-btn:hover{border-color:var(--b3);color:var(--b2);background:rgba(92,58,24,.1)}
 
-.mat-link{display:inline-flex;align-items:center;gap:3px;color:var(--g5);text-decoration:none;font-size:10px;font-weight:700;margin-left:4px;padding:2px 5px;border-radius:3px;background:rgba(44,95,46,.1);border:1px solid rgba(44,95,46,.18);transition:all .15s}
-.mat-link:hover{background:rgba(44,95,46,.2);color:var(--t0)}
+.mat-link{display:inline-flex;align-items:center;gap:3px;color:var(--acc2);text-decoration:none;font-size:10px;font-weight:700;margin-left:4px;padding:2px 5px;border-radius:3px;background:rgba(160,82,45,.1);border:1px solid rgba(160,82,45,.2);transition:all .15s}
+.mat-link:hover{background:rgba(160,82,45,.22);color:var(--b0)}
 .mat-link svg{width:9px;height:9px}
 
-@media print{.site-header,.nav-bar,.total-panel,.stbtn,.add-scope-btn,.add-mat-btn{display:none!important}body{background:#fff;color:#111}.section{border:1px solid #ccc;margin-bottom:14px}.section-header{background:#1A3A0F!important;-webkit-print-color-adjust:exact}.price-total{color:#1A5C1E!important}}
-@media(max-width:700px){.pricing-row{grid-template-columns:1fr}.total-subs{display:none}.main-content{padding:12px}}
+@media print{.site-header,.div-selector-bar,.total-panel,.stbtn,.add-scope-btn,.add-mat-btn,.section-toggle{display:none!important}body{background:#fff;color:#111}.section{border:1px solid #ccc;margin-bottom:14px;display:block!important}.section-body{display:block!important}.section-header{background:#2D1C0A!important;-webkit-print-color-adjust:exact}.price-total{color:#8B4513!important}}
+@media(max-width:700px){.pricing-row{grid-template-columns:1fr}.total-subs{display:none}.main-content{padding:12px}.div-select{min-width:180px}}
 </style>
 </head>
 <body>
@@ -100,24 +133,33 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
   <button class="btn btn-green" onclick="window.print()">⬇ Export PDF</button>
 </header>
 
-<nav class="nav-bar">
-  <a class="nav-pill" href="#s01">01 · Gen Conditions</a>
-  <a class="nav-pill" href="#s02">02 · Site Work</a>
-  <a class="nav-pill" href="#s03">03 · Structural</a>
-  <a class="nav-pill" href="#s04">04 · Framing</a>
-  <a class="nav-pill" href="#s05">05 · Doors</a>
-  <a class="nav-pill" href="#s06">06 · Ceilings</a>
-  <a class="nav-pill" href="#s07">07 · Flooring</a>
-  <a class="nav-pill" href="#s08">08 · Millwork</a>
-  <a class="nav-pill" href="#s09">09 · Specialties</a>
-  <a class="nav-pill" href="#s10">10 · Plumbing</a>
-  <a class="nav-pill" href="#s11">11 · Mechanical</a>
-  <a class="nav-pill" href="#s12">12 · Electrical</a>
-  <a class="nav-pill" href="#s13">13 · Low Voltage</a>
-  <a class="nav-pill" href="#s14">14 · Drive-Thru</a>
-  <a class="nav-pill" href="#s15">15 · Equipment</a>
-  <a class="nav-pill" href="#s16">16 · Graphics</a>
-</nav>
+<div class="div-selector-bar">
+  <span class="div-selector-label">Division</span>
+  <select class="div-select" id="divSelect" onchange="showDiv(this.value)">
+    <option value="all">— Show All Divisions —</option>
+    <option value="s01">01 · General Conditions &amp; Insurance</option>
+    <option value="s02">02 · Site Work &amp; Drive-Thru Civil</option>
+    <option value="s03">03 · Structural — Foundation &amp; Roof Framing</option>
+    <option value="s04">04 · Framing &amp; Drywall</option>
+    <option value="s05">05 · Doors, Frames &amp; Hardware</option>
+    <option value="s06">06 · Acoustical Ceilings &amp; Soffits</option>
+    <option value="s07">07 · Flooring &amp; Finishes</option>
+    <option value="s08">08 · Millwork &amp; Casework</option>
+    <option value="s09">09 · Specialties</option>
+    <option value="s10">10 · Plumbing</option>
+    <option value="s11">11 · Mechanical / HVAC</option>
+    <option value="s12">12 · Electrical</option>
+    <option value="s13">13 · Low Voltage &amp; Data</option>
+    <option value="s14">14 · Drive-Thru System</option>
+    <option value="s15">15 · Equipment — GC Scope Only</option>
+    <option value="s16">16 · Graphics &amp; Signage</option>
+  </select>
+  <div class="div-nav-btns">
+    <button class="btn btn-outline" onclick="prevDiv()">&#8592; Prev</button>
+    <button class="btn btn-outline" onclick="nextDiv()">Next &#8594;</button>
+    <button class="btn btn-brown" onclick="window.print()">⬇ PDF</button>
+  </div>
+</div>
 
 <div class="total-panel">
   <div>
@@ -137,6 +179,8 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
     <span class="num">01</span>
     <h2>General Conditions &amp; Insurance</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="01" data-div-label="Div 01 — General Conditions &amp; Insurance" data-cat="GC Fee">
 
@@ -300,12 +344,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s02">
   <div class="section-header">
     <span class="num">02</span>
     <h2>Site Work &amp; Drive-Thru Civil</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="02" data-div-label="Div 02 — Site Work &amp; Drive-Thru Civil" data-cat="Site Work">
 
@@ -425,12 +473,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s03">
   <div class="section-header">
     <span class="num">03</span>
     <h2>Structural — Foundation &amp; Roof Framing</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="03" data-div-label="Div 03 — Structural Foundation &amp; Roof Framing" data-cat="Structural">
 
@@ -582,12 +634,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s04">
   <div class="section-header">
     <span class="num">04</span>
     <h2>Framing &amp; Drywall</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="04" data-div-label="Div 04 — Framing &amp; Drywall" data-cat="Materials">
 
@@ -759,12 +815,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s05">
   <div class="section-header">
     <span class="num">05</span>
     <h2>Doors, Frames &amp; Hardware</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="05" data-div-label="Div 05 — Doors, Frames &amp; Hardware" data-cat="Materials">
 
@@ -925,12 +985,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s06">
   <div class="section-header">
     <span class="num">06</span>
     <h2>Acoustical Ceilings &amp; Soffits</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="06" data-div-label="Div 06 — Acoustical Ceilings &amp; Soffits" data-cat="Materials">
 
@@ -1107,12 +1171,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s07">
   <div class="section-header">
     <span class="num">07</span>
     <h2>Flooring &amp; Finishes</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="07" data-div-label="Div 07 — Flooring &amp; Finishes" data-cat="Materials">
 
@@ -1337,12 +1405,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s08">
   <div class="section-header">
     <span class="num">08</span>
     <h2>Millwork &amp; Casework</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="08" data-div-label="Div 08 — Millwork &amp; Casework" data-cat="Materials">
 
@@ -1515,12 +1587,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s09">
   <div class="section-header">
     <span class="num">09</span>
     <h2>Specialties</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="09" data-div-label="Div 09 — Specialties" data-cat="Materials">
 
@@ -1737,12 +1813,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s10">
   <div class="section-header">
     <span class="num">10</span>
     <h2>Plumbing</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="10" data-div-label="Div 10 — Plumbing" data-cat="Subcontractor">
 
@@ -1983,12 +2063,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s11">
   <div class="section-header">
     <span class="num">11</span>
     <h2>Mechanical / HVAC</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="11" data-div-label="Div 11 — Mechanical / HVAC" data-cat="Subcontractor">
 
@@ -2189,12 +2273,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s12">
   <div class="section-header">
     <span class="num">12</span>
     <h2>Electrical</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="12" data-div-label="Div 12 — Electrical" data-cat="Subcontractor">
 
@@ -2439,12 +2527,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s13">
   <div class="section-header">
     <span class="num">13</span>
     <h2>Low Voltage &amp; Data</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="13" data-div-label="Div 13 — Low Voltage &amp; Data" data-cat="Subcontractor">
 
@@ -2633,12 +2725,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s14">
   <div class="section-header">
     <span class="num">14</span>
     <h2>Drive-Thru System</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="14" data-div-label="Div 14 — Drive-Thru System" data-cat="Subcontractor">
 
@@ -2831,12 +2927,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s15">
   <div class="section-header">
     <span class="num">15</span>
     <h2>Equipment — GC Scope Only</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="15" data-div-label="Div 15 — Equipment GC Scope Only" data-cat="Materials">
 
@@ -3037,12 +3137,16 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 <section class="section" id="s16">
   <div class="section-header">
     <span class="num">16</span>
     <h2>Graphics &amp; Signage</h2>
   </div>
+<div class="section-body">
+
   <div class="item-grid">
     <div class="item-card" data-div="16" data-div-label="Div 16 — Graphics &amp; Signage" data-cat="Subcontractor">
 
@@ -3243,65 +3347,133 @@ body{font-family:var(--font);background:var(--t9);color:var(--tx1);min-height:10
 
     </div>
   </div>
+
+</div>
 </section>
 
 </div>
 
+
+
 <script>
-function fmt(n){return"$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
+const divIds = ['s01','s02','s03','s04','s05','s06','s07','s08','s09','s10','s11','s12','s13','s14','s15','s16'];
+
+function showDiv(val) {
+  document.querySelectorAll('.section').forEach(s => {
+    if (val === 'all') {
+      s.classList.remove('hidden');
+    } else {
+      s.classList.toggle('hidden', s.id !== val);
+      if (s.id === val) {
+        s.classList.add('open');
+        s.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    }
+  });
+  document.getElementById('divSelect').value = val;
+}
+
+function prevDiv() {
+  const sel = document.getElementById('divSelect');
+  const cur = sel.value;
+  const idx = divIds.indexOf(cur);
+  if (idx > 0) showDiv(divIds[idx - 1]);
+  else if (cur === 'all') showDiv(divIds[divIds.length - 1]);
+}
+
+function nextDiv() {
+  const sel = document.getElementById('divSelect');
+  const cur = sel.value;
+  const idx = divIds.indexOf(cur);
+  if (idx >= 0 && idx < divIds.length - 1) showDiv(divIds[idx + 1]);
+  else showDiv(divIds[0]);
+}
+
+// Toggle accordion on header click
+document.querySelectorAll('.section-header').forEach(h => {
+  if (!h.querySelector('.section-toggle')) {
+    const span = document.createElement('span');
+    span.className = 'section-toggle';
+    span.textContent = '▼';
+    h.appendChild(span);
+  }
+  h.addEventListener('click', () => {
+    const sec = h.closest('.section');
+    sec.classList.toggle('open');
+  });
+});
+
+// Add section totals to headers
+document.querySelectorAll('.section-header').forEach(h => {
+  if (!h.querySelector('.section-div-total')) {
+    const span = document.createElement('span');
+    span.className = 'section-div-total';
+    h.insertBefore(span, h.querySelector('.section-toggle'));
+  }
+});
+
+function fmt(n){return'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+
 function calcRow(input){
-  const row=input.closest(".pricing-row");
-  if(!row)return;
-  const q=parseFloat(row.querySelector("[data-role=qty]")?.value)||0;
-  const u=parseFloat(row.querySelector("[data-role=unit]")?.value)||0;
-  const t=row.querySelector("[data-role=total]");
-  if(t)t.textContent=fmt(q*u);
+  const row = input.closest('.pricing-row');
+  if (!row) return;
+  const q = parseFloat(row.querySelector('[data-role=qty]')?.value)||0;
+  const u = parseFloat(row.querySelector('[data-role=unit]')?.value)||0;
+  const t = row.querySelector('[data-role=total]');
+  if (t) t.textContent = fmt(q*u);
   updateTotals();
 }
+
 function updateTotals(){
-  let grand=0,mat=0,lab=0,priced=0;
-  document.querySelectorAll(".section").forEach(sec=>{
-    let st=0;
-    sec.querySelectorAll(".pricing-row").forEach(row=>{
-      const q=parseFloat(row.querySelector("[data-role=qty]")?.value)||0;
-      const u=parseFloat(row.querySelector("[data-role=unit]")?.value)||0;
-      const v=q*u;st+=v;grand+=v;
-      if(row.classList.contains("labor-row"))lab+=v;else mat+=v;
+  let grand=0, mat=0, lab=0, priced=0;
+  document.querySelectorAll('.section').forEach(sec => {
+    let st = 0;
+    sec.querySelectorAll('.pricing-row').forEach(row => {
+      const q = parseFloat(row.querySelector('[data-role=qty]')?.value)||0;
+      const u = parseFloat(row.querySelector('[data-role=unit]')?.value)||0;
+      const v = q*u; st+=v; grand+=v;
+      if (row.classList.contains('labor-row')) lab+=v; else mat+=v;
     });
-    const el=sec.querySelector(".section-div-total");
-    if(el)el.textContent=st>0?fmt(st):"";
-    if(st>0)priced++;
+    const el = sec.querySelector('.section-div-total');
+    if (el) el.textContent = st>0 ? fmt(st) : '';
+    if (st>0) priced++;
   });
-  document.getElementById("grandTotal").textContent=fmt(grand);
-  document.getElementById("matTotal").textContent=fmt(mat);
-  document.getElementById("laborTotal").textContent=fmt(lab);
-  document.getElementById("divCount").textContent=priced+" / 16";
+  document.getElementById('grandTotal').textContent = fmt(grand);
+  document.getElementById('matTotal').textContent = fmt(mat);
+  document.getElementById('laborTotal').textContent = fmt(lab);
+  document.getElementById('divCount').textContent = priced+' / 16';
 }
+
 function addScope(id){
-  const list=document.getElementById(id);if(!list)return;
-  const text=prompt("Enter scope task:");if(!text)return;
-  const li=document.createElement("li");li.className="scope-task-item";
+  const list = document.getElementById(id); if(!list) return;
+  const text = prompt('Enter scope task:'); if(!text) return;
+  const li = document.createElement('li'); li.className='scope-task-item';
   li.innerHTML=`<span class="scope-task-text">${text}</span><div class="scope-task-actions"><button class="stbtn edit" onclick="editScope(this)">✎</button><button class="stbtn del" onclick="removeScope(this)">✕</button></div>`;
   list.appendChild(li);
 }
+
 function editScope(btn){
-  const s=btn.closest(".scope-task-item").querySelector(".scope-task-text");
-  const v=prompt("Edit:",s.textContent);if(v!==null)s.textContent=v;
+  const s=btn.closest('.scope-task-item').querySelector('.scope-task-text');
+  const v=prompt('Edit:',s.textContent); if(v!==null) s.textContent=v;
 }
-function removeScope(btn){if(confirm("Remove?"))btn.closest(".scope-task-item").remove();}
+
+function removeScope(btn){if(confirm('Remove?'))btn.closest('.scope-task-item').remove();}
+
 function addMaterialRow(btn){
-  const card=btn.closest(".card-pricing");
-  const label=prompt("Line item name:");if(!label)return;
-  const row=document.createElement("div");row.className="pricing-row";row.dataset.rowLabel=label;
-  row.innerHTML=`<div class="pricing-row-label">${label}</div><input class="price-input" type="number" placeholder="0" min="0" step="1" data-role="qty" oninput="calcRow(this)"><select class="unit-select" onchange="calcRow(this.parentElement.querySelector('[data-role=qty]'))"><option>LS</option><option>EA</option><option>SF</option><option>LF</option></select><input class="price-input" type="number" placeholder="$" min="0" step="0.01" data-role="unit" oninput="calcRow(this)"><div class="price-total" data-role="total">$0.00</div>`;
-  card.insertBefore(row,btn);
+  const card=btn.closest('.card-pricing');
+  const label=prompt('Line item name:'); if(!label) return;
+  const row=document.createElement('div'); row.className='pricing-row'; row.dataset.rowLabel=label;
+  row.innerHTML=`<div class="pricing-row-label">${label}</div><input class="price-input" type="number" placeholder="0" min="0" step="1" data-role="qty" oninput="calcRow(this)"><select class="unit-select" onchange="calcRow(this.parentElement.querySelector('[data-role=qty]'))"><option>LS</option><option>EA</option><option>SF</option><option>LF</option><option>HR</option></select><input class="price-input" type="number" placeholder="$" min="0" step="0.01" data-role="unit" oninput="calcRow(this)"><div class="price-total" data-role="total">$0.00</div>`;
+  card.insertBefore(row, btn);
 }
-document.querySelectorAll(".section-header").forEach(h=>{
-  if(!h.querySelector(".section-div-total")){
-    const s=document.createElement("span");s.className="section-div-total";h.appendChild(s);
-  }
-});
-document.querySelectorAll(".price-input").forEach(el=>el.addEventListener("input",()=>calcRow(el)));
+
+// Wire all inputs
+document.querySelectorAll('.price-input').forEach(el => el.addEventListener('input', ()=>calcRow(el)));
+
+// Start with all sections collapsed, show first one
+document.querySelectorAll('.section').forEach(s => s.classList.remove('open'));
+showDiv('s01');
 </script>
+
 </body>
 </html>
