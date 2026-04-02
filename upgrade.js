@@ -260,16 +260,7 @@ scopeNotes['Graphics & Signage GC Labor \u2014 Electrical, Blocking, Coordinatio
 
 /* -- 4. SOURCE LINK URL MAP — DEEP PRODUCT PAGES -------------------- */
 var sourceLinks = {};
-/* DIV 01 */
-sourceLinks['General Conditions / Superintendent'] = 'https://www.smoothieking.com/franchise/franchise-development';
-sourceLinks['Building Permit & All Inspection Fees'] = 'https://www.russellvillear.gov/199/Building-Permits';
-sourceLinks['Performance & Payment Bond (100% of contract)'] = 'https://www.suretysite.com/performance-bonds';
-sourceLinks['Insurance \u2014 GL, Auto, Workers Comp'] = 'https://www.suretysite.com/contractors-insurance';
-sourceLinks['Temporary Facilities \u2014 Power, Toilets, Dumpster'] = 'https://www.unitedrentals.com/marketplace/temporary-power-distribution';
-sourceLinks['Equipment Delivery Coordination & Forklift'] = 'https://www.unitedrentals.com/marketplace/forklifts';
-sourceLinks['Final Clean & Attic Stock Delivery'] = 'https://www.smoothieking.com/franchise/franchise-development';
-sourceLinks['Closeout Package \u2014 As-Builts, O&M Manuals, Warranties, Lien Waivers'] = 'https://www.smoothieking.com/franchise/franchise-development';
-sourceLinks['GC Fee / Overhead & Profit'] = 'https://www.smoothieking.com/franchise/franchise-development';
+/* DIV 01 — no source links needed (GC admin / insurance / permits) */
 /* DIV 02 */
 sourceLinks['6" Steel Bollards \u2014 concrete filled, painted'] = 'https://www.mcmaster.com/steel-bollards';
 sourceLinks['Concrete Paving Sealant & Expansion Joint Material'] = 'https://www.dowsil.com/en/products-solutions/product-lines/dowsil/construction-sealants.html';
